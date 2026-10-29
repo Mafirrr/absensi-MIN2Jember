@@ -17,10 +17,12 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        brand: {
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                        emerald: {
+                            50: '#E8F6EE',
+                            100: '#D1F0DE',
+                            600: '#0E8345',
+                            700: '#0B6E3F',
+                            800: '#095A34',
                         }
                     }
                 }
@@ -28,36 +30,42 @@
         }
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f7fc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F0F2F5; }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex items-center justify-center p-4 antialiased">
 
     <div class="w-full max-w-md">
         
-        <!-- Header Branding Matching Screenshot -->
-        <div class="text-center mb-8">
-            <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-20 h-20 mx-auto mb-3.5 rounded-full object-cover shadow-lg shadow-slate-300/70 ring-4 ring-white">
+        <!-- Header Branding Matching Oripio Style -->
+        <div class="text-center mb-6">
+            <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-16 h-16 mx-auto mb-3 rounded-full object-cover shadow-sm ring-2 ring-white">
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">SIABSEN</h1>
-            <p class="text-xs text-slate-500 font-medium mt-1">Sistem Informasi Absensi Sekolah Digital</p>
+            <p class="text-xs text-slate-400 font-medium mt-1">Sistem Informasi Presensi Digital Sekolah</p>
         </div>
 
-        <!-- Clean Card -->
-        <div class="bg-white rounded-[24px] border border-slate-100 p-8 shadow-xl shadow-slate-200/50">
+        <!-- Clean Rounded Card Matching Screenshot -->
+        <div class="bg-white rounded-[28px] border border-slate-200/80 p-8 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)]">
             <div class="mb-6">
-                <h2 class="text-lg font-bold text-slate-900">Selamat Datang</h2>
+                <h2 class="text-lg font-extrabold text-slate-900">Selamat Datang</h2>
                 <p class="text-xs text-slate-400 mt-0.5">Silakan masuk menggunakan akun Tata Usaha atau Guru</p>
             </div>
 
             @if(session('success'))
-                <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-                    {{ session('success') }}
+                <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{{ session('success') }}</span>
                 </div>
             @endif
 
             @if($errors->any())
-                <div class="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
-                    {{ $errors->first() }}
+                <div class="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>{{ $errors->first() }}</span>
                 </div>
             @endif
 
@@ -73,7 +81,7 @@
                             </svg>
                         </span>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@sekolah.sch.id"
-                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 focus:bg-white transition">
                     </div>
                 </div>
 
@@ -88,25 +96,25 @@
                             </svg>
                         </span>
                         <input id="password" type="password" name="password" required placeholder="••••••••"
-                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 focus:bg-white transition">
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-1">
                     <label class="flex items-center text-xs text-slate-600 cursor-pointer">
-                        <input type="checkbox" name="remember" class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                        <input type="checkbox" name="remember" class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
                         <span class="ml-2">Ingat sesi saya</span>
                     </label>
                 </div>
 
                 <button type="submit"
-                    class="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs tracking-wide shadow-md shadow-brand-600/25 transition">
+                    class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wide shadow-xs transition">
                     Masuk Sekarang
                 </button>
             </form>
         </div>
 
-        <p class="text-center text-xs text-slate-400 mt-8 font-medium">
+        <p class="text-center text-xs text-slate-400 mt-6 font-medium">
             &copy; {{ date('Y') }} SIABSEN &bull; Akses resmi Tata Usaha & Guru
         </p>
 

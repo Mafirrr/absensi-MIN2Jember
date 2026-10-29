@@ -16,7 +16,7 @@
     <div class="custom-card p-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-brand-700 mb-2">
+                <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 mb-2">
                     Tingkat {{ $kelas->tingkat }} &bull; {{ $kelas->jurusan ?? 'Umum' }}
                 </span>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ $kelas->nama_kelas }}</h2>

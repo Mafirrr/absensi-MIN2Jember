@@ -100,6 +100,25 @@ class DashboardController extends Controller
             }
         }
 
+        // Tren 7 hari terakhir untuk rombel kelas yang dipilih
+        $trendDates = [];
+        $trendHadir = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $d = Carbon::today()->subDays($i);
+            $dStr = $d->format('Y-m-d');
+            $trendDates[] = $d->translatedFormat('d M');
+
+            if ($selectedKelas) {
+                $count = Absensi::where('kelas_id', $selectedKelas->id)
+                    ->where('tanggal', $dStr)
+                    ->where('status', 'hadir')
+                    ->count();
+                $trendHadir[] = $count;
+            } else {
+                $trendHadir[] = 0;
+            }
+        }
+
         return view('guru.dashboard', compact(
             'kelasList',
             'selectedKelas',
@@ -114,6 +133,8 @@ class DashboardController extends Controller
             'totalIzinBulanIni',
             'totalSakitBulanIni',
             'totalAlpaBulanIni',
+            'trendDates',
+            'trendHadir',
             'today',
             'currentMonth',
             'currentYear'

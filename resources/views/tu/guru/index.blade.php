@@ -55,7 +55,7 @@
                             <td class="py-3.5 px-5">
                                 @if($guru->kelasWali->isNotEmpty())
                                     @foreach($guru->kelasWali as $kw)
-                                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-brand-700 font-bold text-[10px] mr-1">
+                                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold text-[10px] mr-1">
                                             Wali {{ $kw->nama_kelas }}
                                         </span>
                                     @endforeach

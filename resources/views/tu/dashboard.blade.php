@@ -6,499 +6,462 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Welcome Banner Matching Screenshot -->
-    <div class="bg-gradient-to-r from-blue-50 via-sky-50/70 to-indigo-50/80 border border-blue-100/80 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden shadow-xs">
-        <div class="space-y-2 max-w-xl z-10">
-            <p class="text-sm font-semibold text-slate-600 flex items-center gap-1.5">
-                Good Morning, <span class="text-lg">👋</span>
-            </p>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                {{ auth()->user()->name }}!
+    <!-- Top Greeting Row Matching Screenshot -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+        <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">
+                Welcome back {{ auth()->user()->name }}
             </h2>
-            <p class="text-xs text-slate-500 font-medium leading-relaxed">
-                Panel administratif Tata Usaha. Pantau seluruh aktivitas presensi dari semua rombel kelas, rekap harian & bulanan, serta kelola master data kelas dan siswa.
+            <p class="text-xs text-slate-400 font-medium mt-1">
+                Monitor and control student attendance records today for school operational excellence.
             </p>
-            <div class="pt-2 flex items-center space-x-3 text-xs font-bold">
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100/80 text-brand-700">
-                    {{ $totalKelas }} Rombel Aktif
-                </span>
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-700">
-                    {{ $totalSiswa }} Siswa Terdaftar
-                </span>
-            </div>
         </div>
 
-        <!-- Illustration: Stack of books & plant in pot matching screenshot -->
-        <div class="hidden md:flex items-center justify-center flex-shrink-0 z-10 pr-4">
-            <svg class="w-48 h-32" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Plant in Pot -->
-                <ellipse cx="65" cy="140" rx="20" ry="6" fill="#cbd5e1" opacity="0.4" />
-                <path d="M54 110 H76 L73 140 H57 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
-                <ellipse cx="65" cy="110" rx="11" ry="3" fill="#64748b" />
-                <!-- Stem & Leaves -->
-                <path d="M65 110 Q65 85 70 75" stroke="#15803d" stroke-width="3" stroke-linecap="round" fill="none" />
-                <path d="M66 98 Q52 92 56 80 Q68 85 66 98 Z" fill="#22c55e" />
-                <path d="M68 86 Q82 80 78 68 Q66 73 68 86 Z" fill="#16a34a" />
-                <path d="M70 75 Q62 60 70 52 Q78 62 70 75 Z" fill="#4ade80" />
+        <div class="flex items-center space-x-3">
+            <!-- Date Pill Badge -->
+            <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-2xs text-xs font-semibold text-slate-600">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{ now()->translatedFormat('D, d F Y') }}</span>
+            </div>
 
-                <!-- Books Shadows -->
-                <ellipse cx="160" cy="148" rx="55" ry="10" fill="#94a3b8" opacity="0.3" />
-
-                <!-- Bottom Book (Blue) -->
-                <rect x="110" y="125" width="95" height="18" rx="3" fill="#1d4ed8" />
-                <rect x="115" y="127" width="88" height="14" fill="#ffffff" />
-                <rect x="110" y="125" width="12" height="18" rx="3" fill="#1e40af" />
-                <line x1="125" y1="130" x2="198" y2="130" stroke="#cbd5e1" stroke-width="1.5" />
-                <line x1="125" y1="134" x2="198" y2="134" stroke="#cbd5e1" stroke-width="1.5" />
-                <line x1="125" y1="138" x2="198" y2="138" stroke="#cbd5e1" stroke-width="1.5" />
-
-                <!-- Middle Book (Yellow/Gold) -->
-                <rect x="115" y="105" width="90" height="18" rx="3" fill="#eab308" />
-                <rect x="120" y="107" width="83" height="14" fill="#ffffff" />
-                <rect x="115" y="105" width="12" height="18" rx="3" fill="#ca8a04" />
-                <line x1="130" y1="110" x2="198" y2="110" stroke="#cbd5e1" stroke-width="1.5" />
-                <line x1="130" y1="114" x2="198" y2="114" stroke="#cbd5e1" stroke-width="1.5" />
-
-                <!-- Top Book (Cyan/Blue) -->
-                <rect x="122" y="85" width="80" height="18" rx="3" fill="#2563eb" />
-                <rect x="126" y="87" width="74" height="14" fill="#ffffff" />
-                <rect x="122" y="85" width="10" height="18" rx="3" fill="#1d4ed8" />
-                <line x1="135" y1="90" x2="195" y2="90" stroke="#cbd5e1" stroke-width="1.5" />
-                <line x1="135" y1="94" x2="195" y2="94" stroke="#cbd5e1" stroke-width="1.5" />
-
-                <!-- Flying Birds -->
-                <path d="M210 50 Q215 45 220 50 Q225 45 230 50" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
-                <path d="M195 62 Q199 58 203 62 Q207 58 211 62" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
-            </svg>
+            <!-- Export / Action Button -->
+            <a href="{{ route('tu.rekap.harian') }}"
+               class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-slate-900 text-white text-xs font-semibold shadow-xs transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <span>Rekap Harian</span>
+            </a>
         </div>
     </div>
 
-    <!-- 5 Metric Cards Row Matching Screenshot -->
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        <!-- 1. Total Kelas -->
-        <div class="custom-card p-4 flex items-center space-x-3.5 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-brand-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                </svg>
-            </div>
-            <div class="overflow-hidden">
-                <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-tight truncate">Total Kelas</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalKelas }}</p>
-                <span class="text-[10px] text-slate-400 font-medium">Rombel Sekolah</span>
-            </div>
-        </div>
+    <!-- 3 Top Stat Cards Row Matching Screenshot -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
-        <!-- 2. Siswa Aktif -->
-        <div class="custom-card p-4 flex items-center space-x-3.5 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" />
-                </svg>
-            </div>
-            <div class="overflow-hidden">
-                <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-tight truncate">Siswa Aktif</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalSiswa }}</p>
-                <span class="text-[10px] text-emerald-600 font-semibold">Semua Kelas</span>
-            </div>
-        </div>
-
-        <!-- 3. Tenaga Pendidik (Guru) -->
-        <div class="custom-card p-4 flex items-center space-x-3.5 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-            </div>
-            <div class="overflow-hidden">
-                <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-tight truncate">Total Guru</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalGuru }}</p>
-                <span class="text-[10px] text-purple-600 font-semibold">Wali & Pengampu</span>
-            </div>
-        </div>
-
-        <!-- 4. Hadir Hari Ini -->
-        <div class="custom-card p-4 flex items-center space-x-3.5 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
-            <div class="overflow-hidden">
-                <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-tight truncate">Hadir Hari Ini</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $hadirHariIni }}</p>
-                <span class="text-[10px] text-amber-600 font-semibold">I: {{ $izinHariIni }} &bull; S: {{ $sakitHariIni }} &bull; A: {{ $alpaHariIni }}</span>
-            </div>
-        </div>
-
-        <!-- 5. Overall Attendance % -->
-        <div class="custom-card p-4 flex items-center space-x-3.5 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-            </div>
-            <div class="overflow-hidden">
-                <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-tight truncate">% Kehadiran</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $persenKehadiran }}%</p>
-                <span class="text-[10px] text-rose-600 font-semibold">Rata-rata Hari Ini</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Middle Section: Class Attendance Status (Left 2 cols) & Notice Board (Right 1 col) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Left 2 Cols: Monitoring Rombel Kelas Hari Ini -->
-        <div class="lg:col-span-2 custom-card p-6 flex flex-col justify-between">
+        <!-- Card 1: Account Balance Style (Hero Stat) -->
+        <div class="oripio-card p-5 flex flex-col justify-between">
             <div>
-                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-                    <h3 class="text-sm font-bold text-slate-900 tracking-tight">Status Kehadiran Per Rombel Kelas Hari Ini</h3>
-                    <a href="{{ route('tu.rekap.harian') }}" class="text-xs font-bold text-brand-600 hover:text-brand-700">
-                        View All Results
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold text-slate-700">Total Siswa Terdaftar</span>
+                    </div>
+
+                    <span class="inline-flex items-center text-[11px] font-bold text-slate-500 bg-slate-50 border border-slate-200/80 px-2 py-0.5 rounded-lg">
+                        {{ $totalKelas }} Rombel ▾
+                    </span>
+                </div>
+
+                <!-- Big Metric -->
+                <div class="mt-3">
+                    <div class="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {{ $totalSiswa }} Siswa
+                    </div>
+                    <div class="mt-1 flex items-center space-x-1.5">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                            +{{ $persenKehadiran }}% ↑
+                        </span>
+                        <span class="text-[11px] font-medium text-slate-400">tingkat kehadiran hari ini</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Row (Send Money / Request Money style) -->
+            <div class="mt-5 grid grid-cols-2 gap-2.5 pt-1">
+                <a href="{{ route('tu.rekap.harian') }}"
+                   class="inline-flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                    </svg>
+                    <span>Rekap Harian</span>
+                </a>
+
+                <a href="{{ route('tu.rekap.bulanan') }}"
+                   class="inline-flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/80 text-xs font-bold transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                    <span>Rekap Bulanan</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 2: Total Expenses Style -->
+        <div class="oripio-card p-5 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold text-slate-700">Siswa Hadir Hari Ini</span>
+                    </div>
+
+                    <button class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <circle cx="10" cy="4" r="1.5" />
+                            <circle cx="10" cy="10" r="1.5" />
+                            <circle cx="10" cy="16" r="1.5" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-3">
+                    <div class="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {{ $hadirHariIni }} Siswa
+                    </div>
+                    <div class="mt-1 flex items-center space-x-1.5">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                            {{ $totalSiswa > 0 ? round(($hadirHariIni / $totalSiswa) * 100, 1) : 0 }}%
+                        </span>
+                        <span class="text-[11px] font-medium text-slate-400">dari total seluruh siswa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub Progress Bar -->
+            <div class="mt-5 pt-1">
+                <div class="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1.5">
+                    <span>Progress Kehadiran</span>
+                    <span class="text-slate-700">{{ $hadirHariIni }} / {{ $totalSiswa }}</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                    <div class="bg-emerald-600 h-2 rounded-full transition-all duration-500" style="width: {{ $totalSiswa > 0 ? round(($hadirHariIni / $totalSiswa) * 100) : 0 }}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Total Savings Style -->
+        <div class="oripio-card p-5 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold text-slate-700">Izin, Sakit & Alpa</span>
+                    </div>
+
+                    <button class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <circle cx="10" cy="4" r="1.5" />
+                            <circle cx="10" cy="10" r="1.5" />
+                            <circle cx="10" cy="16" r="1.5" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-3">
+                    <div class="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {{ $izinHariIni + $sakitHariIni + $alpaHariIni }} Siswa
+                    </div>
+                    <div class="mt-1 flex items-center space-x-1.5">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
+                            {{ $alpaHariIni }} Alpa
+                        </span>
+                        <span class="text-[11px] font-medium text-slate-400">perlu tindak lanjut wali kelas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Pills Breakdown -->
+            <div class="mt-5 grid grid-cols-3 gap-2 pt-1 text-center">
+                <div class="p-2 rounded-xl bg-purple-50/70 border border-purple-100">
+                    <span class="block text-[10px] font-bold text-purple-600 uppercase">Izin</span>
+                    <span class="text-sm font-extrabold text-purple-900">{{ $izinHariIni }}</span>
+                </div>
+                <div class="p-2 rounded-xl bg-amber-50/70 border border-amber-100">
+                    <span class="block text-[10px] font-bold text-amber-600 uppercase">Sakit</span>
+                    <span class="text-sm font-extrabold text-amber-900">{{ $sakitHariIni }}</span>
+                </div>
+                <div class="p-2 rounded-xl bg-rose-50/70 border border-rose-100">
+                    <span class="block text-[10px] font-bold text-rose-600 uppercase">Alpa</span>
+                    <span class="text-sm font-extrabold text-rose-900">{{ $alpaHariIni }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Middle Section: Left Widgets (40%) & Right Widgets (60%) Matching Screenshot -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- LEFT COLUMN (5 of 12 cols): My Wallet & My Savings Plan Style -->
+        <div class="lg:col-span-5 space-y-5">
+
+            <!-- Widget 1: My Wallet Style -> Daftar Rombel Kelas -->
+            <div class="oripio-card p-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                    <h3 class="text-xs font-bold text-slate-900 tracking-tight">Rombel Kelas Binaan</h3>
+                    <a href="{{ route('tu.kelas.index') }}" class="text-[11px] font-bold text-emerald-600 hover:text-emerald-700">
+                        + Kelola Kelas
+                    </a>
+                </div>
+
+                <!-- 2x2 Mini Cards Grid Matching Screenshot Currencies -->
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    @forelse($kelasList->take(4) as $k)
+                        <div class="p-3 rounded-2xl border border-slate-150 bg-slate-50/50 hover:bg-white hover:shadow-xs transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-[10px] font-extrabold flex items-center justify-center">
+                                        {{ substr($k['nama_kelas'], 0, 1) }}
+                                    </span>
+                                    <span class="text-xs font-bold text-slate-800">{{ $k['nama_kelas'] }}</span>
+                                </div>
+                                <span class="text-slate-300 text-xs">&vellip;</span>
+                            </div>
+
+                            <div class="text-sm font-extrabold text-slate-900">
+                                {{ $k['total_siswa'] }} Siswa
+                            </div>
+                            <div class="mt-1 flex items-center justify-between text-[10px]">
+                                <span class="text-slate-400 truncate max-w-[80px]">{{ $k['wali_kelas'] }}</span>
+                                <span class="font-bold {{ $k['sudah_input'] ? 'text-emerald-600' : 'text-slate-400' }}">
+                                    ● {{ $k['sudah_input'] ? 'Diisi (' . $k['persen'] . '%)' : 'Belum' }}
+                                </span>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-span-2 py-4 text-center text-xs text-slate-400">
+                            Belum ada data rombel kelas.
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Widget 2: My Savings Plan Style -> Statistik Kehadiran per Status -->
+            <div class="oripio-card p-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400">🎯</span>
+                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Statistik Status Kehadiran</h3>
+                    </div>
+                    <button class="text-slate-400 hover:text-slate-600">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <circle cx="10" cy="4" r="1.5" />
+                            <circle cx="10" cy="10" r="1.5" />
+                            <circle cx="10" cy="16" r="1.5" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4">
+                    <!-- Item 1: Tingkat Kehadiran (Hadir) -->
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                <span class="font-bold text-slate-800">Tingkat Hadir</span>
+                            </div>
+                            <span class="font-extrabold text-emerald-700">{{ $persenKehadiran }}%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                            <span>{{ $hadirHariIni }} dari {{ $totalSiswa }} siswa hadir</span>
+                            <span>Target 95%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-600 h-2 rounded-full" style="width: {{ min(100, $persenKehadiran) }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: Izin & Sakit -->
+                    @php
+                        $persenIzinSakit = $totalSiswa > 0 ? round((($izinHariIni + $sakitHariIni) / $totalSiswa) * 100, 1) : 0;
+                    @endphp
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                <span class="font-bold text-slate-800">Izin & Sakit</span>
+                            </div>
+                            <span class="font-extrabold text-amber-600">{{ $persenIzinSakit }}%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                            <span>{{ $izinHariIni + $sakitHariIni }} siswa terkonfirmasi</span>
+                            <span>Maks 5%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                            <div class="bg-amber-400 h-2 rounded-full" style="width: {{ min(100, $persenIzinSakit) }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Alpa -->
+                    @php
+                        $persenAlpa = $totalSiswa > 0 ? round(($alpaHariIni / $totalSiswa) * 100, 1) : 0;
+                    @endphp
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                <span class="font-bold text-slate-800">Alpa / Tanpa Keterangan</span>
+                            </div>
+                            <span class="font-extrabold text-rose-600">{{ $persenAlpa }}%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                            <span>{{ $alpaHariIni }} siswa belum konfirmasi</span>
+                            <span>Target 0%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                            <div class="bg-rose-500 h-2 rounded-full" style="width: {{ min(100, $persenAlpa) }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN (7 of 12 cols): Overview Bar Chart & Recent Transaction Style -->
+        <div class="lg:col-span-7 space-y-5">
+
+            <!-- Widget 1: Overview Bar Chart (EXACT match to screenshot) -->
+            <div class="oripio-card p-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
+                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran</h3>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            <span class="text-[11px]">Kehadiran</span>
+                        </div>
+
+                        <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
+                            7 Hari Terakhir ▾
+                        </span>
+
+                        <button class="text-slate-400 hover:text-slate-600">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <circle cx="10" cy="4" r="1.5" />
+                                <circle cx="10" cy="10" r="1.5" />
+                                <circle cx="10" cy="16" r="1.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
+                <div class="pt-6 pb-2">
+                    <div class="h-44 flex items-end justify-between gap-3 px-2">
+                        @php
+                            $maxHadir = max(1, ...$trendHadir);
+                        @endphp
+                        @foreach($dates as $idx => $dateLabel)
+                            @php
+                                $val = $trendHadir[$idx] ?? 0;
+                                $heightPct = round(($val / $maxHadir) * 85);
+                                $isToday = $idx === (count($dates) - 1);
+                            @endphp
+                            <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
+                                <!-- Tooltip badge for active / today bar matching screenshot -->
+                                @if($isToday)
+                                    <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
+                                    </div>
+                                @endif
+
+                                <!-- Pillar Bar -->
+                                <div class="w-full max-w-[36px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
+                                     style="height: {{ max(12, $heightPct) }}%">
+                                </div>
+
+                                <!-- Label below bar -->
+                                <span class="text-[10px] font-bold mt-2 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
+                                    {{ $dateLabel }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <!-- Widget 2: Recent Transaction Style -> Status Presensi Rombel Hari Ini -->
+            <div class="oripio-card p-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400">📋</span>
+                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Status Presensi Rombel Hari Ini</h3>
+                    </div>
+                    <a href="{{ route('tu.rekap.harian') }}" class="text-[11px] font-bold text-slate-500 hover:text-slate-800 flex items-center space-x-1">
+                        <span>Filter</span>
+                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
                     </a>
                 </div>
 
                 <div class="overflow-x-auto mt-2">
-                    <table class="w-full text-left border-collapse text-xs">
+                    <table class="w-full text-left text-xs border-collapse">
                         <thead>
-                            <tr class="text-slate-400 font-bold border-b border-slate-100">
-                                <th class="py-3 px-3">Kelas</th>
-                                <th class="py-3 px-3">Wali Kelas</th>
-                                <th class="py-3 px-2 text-center">Siswa</th>
-                                <th class="py-3 px-2 text-center">H</th>
-                                <th class="py-3 px-2 text-center">I</th>
-                                <th class="py-3 px-2 text-center">S</th>
-                                <th class="py-3 px-2 text-center">A</th>
-                                <th class="py-3 px-3 text-center">Status</th>
-                                <th class="py-3 px-3 text-right">Detail</th>
+                            <tr class="text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-100">
+                                <th class="py-2.5 px-3">Kelas & Wali</th>
+                                <th class="py-2.5 px-2 text-center">H / I / S / A</th>
+                                <th class="py-2.5 px-3 text-center">Kehadiran</th>
+                                <th class="py-2.5 px-3 text-center">Status</th>
+                                <th class="py-2.5 px-2 text-right"></th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-100/80">
                             @forelse($kelasList as $item)
-                                <tr class="hover:bg-slate-50/70 transition">
-                                    <td class="py-3 px-3 font-bold text-slate-800">
-                                        {{ $item['nama_kelas'] }}
+                                <tr class="hover:bg-slate-50/60 transition">
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-800">{{ $item['nama_kelas'] }}</div>
+                                        <div class="text-[10px] text-slate-400">{{ $item['wali_kelas'] }}</div>
                                     </td>
-                                    <td class="py-3 px-3 text-slate-500">
-                                        {{ $item['wali_kelas'] }}
+                                    <td class="py-3 px-2 text-center text-[11px] font-semibold text-slate-600">
+                                        <span class="text-emerald-700 font-bold">{{ $item['hadir'] }}</span> /
+                                        <span class="text-purple-600">{{ $item['izin'] }}</span> /
+                                        <span class="text-amber-600">{{ $item['sakit'] }}</span> /
+                                        <span class="text-rose-600 font-bold">{{ $item['alpa'] }}</span>
                                     </td>
-                                    <td class="py-3 px-2 text-center font-bold text-slate-700">
-                                        {{ $item['total_siswa'] }}
-                                    </td>
-                                    <td class="py-3 px-2 text-center font-bold text-emerald-600">
-                                        {{ $item['hadir'] }}
-                                    </td>
-                                    <td class="py-3 px-2 text-center font-medium text-purple-600">
-                                        {{ $item['izin'] }}
-                                    </td>
-                                    <td class="py-3 px-2 text-center font-medium text-amber-600">
-                                        {{ $item['sakit'] }}
-                                    </td>
-                                    <td class="py-3 px-2 text-center font-medium text-rose-600">
-                                        {{ $item['alpa'] }}
+                                    <td class="py-3 px-3 text-center">
+                                        <span class="font-extrabold text-slate-800 text-xs">{{ $item['persen'] }}%</span>
                                     </td>
                                     <td class="py-3 px-3 text-center">
                                         @if($item['sudah_input'])
-                                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                                Sudah Diisi ({{ $item['persen'] }}%)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                                                ● Selesai
                                             </span>
                                         @else
-                                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-500">
-                                                Belum Diisi
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">
+                                                ○ Belum Diisi
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="py-3 px-3 text-right">
-                                        <a href="{{ route('tu.rekap.harian', ['kelas_id' => $item['id']]) }}" class="text-brand-600 hover:text-brand-700 font-bold">
-                                            Lihat &rarr;
+                                    <td class="py-3 px-2 text-right">
+                                        <a href="{{ route('tu.rekap.harian', ['kelas_id' => $item['id']]) }}" class="text-slate-400 hover:text-emerald-600 text-sm font-bold">
+                                            &hellip;
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="py-6 text-center text-slate-400">Belum ada kelas terdaftar.</td>
+                                    <td colspan="5" class="py-6 text-center text-slate-400 text-xs">
+                                        Belum ada rombel kelas.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Right 1 Col: Notice Board Matching Screenshot -->
-        <div class="custom-card p-6 flex flex-col justify-between">
-            <div>
-                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-                    <h3 class="text-sm font-bold text-slate-900 tracking-tight">Notice Board</h3>
-                    <a href="{{ route('tu.rekap.harian') }}" class="text-xs font-bold text-brand-600 hover:text-brand-700">
-                        View All Notices
-                    </a>
-                </div>
-
-                <div class="mt-4 space-y-4">
-                    <!-- Notice 1 -->
-                    <div class="flex items-start space-x-3.5">
-                        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-900 leading-snug">
-                                Pemantauan Absensi Harian
-                            </h4>
-                            <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                                Pastikan seluruh guru/wali kelas telah mencatat kehadiran sebelum rekap harian ditutup.
-                            </p>
-                            <span class="text-[10px] font-bold text-brand-600 mt-1 block">
-                                {{ now()->translatedFormat('d F Y') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Notice 2 -->
-                    <div class="flex items-start space-x-3.5">
-                        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-900 leading-snug">
-                                Cetak Laporan Bulanan
-                            </h4>
-                            <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                                Lembar rekapitulasi kehadiran matriks bulanan siap diekspor dan dicetak untuk arsip.
-                            </p>
-                            <span class="text-[10px] font-bold text-brand-600 mt-1 block">
-                                Periode Aktif 2025/2026
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Quick Button -->
-                    <div class="pt-2">
-                        <a href="{{ route('tu.rekap.bulanan') }}"
-                            class="w-full flex items-center justify-center space-x-2 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/25 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <span>Buka Rekap Bulanan Semua Kelas</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Bottom Row: Calendar, Quick Access, Performance Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- 1. Academic Calendar Matching Screenshot -->
-        <div class="custom-card p-6">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-                <h3 class="text-xs font-bold text-slate-900 tracking-tight">Academic Calendar</h3>
-                <span class="text-xs font-bold text-brand-600">
-                    {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
-                </span>
-            </div>
-
-            <!-- Mini Calendar Grid -->
-            <div class="text-center text-xs">
-                <div class="grid grid-cols-7 gap-1 font-bold text-slate-400 text-[10px] mb-2">
-                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span class="text-rose-400">Sat</span><span class="text-rose-400">Sun</span>
-                </div>
-
-                @php
-                    $startDayOfMonth = \Carbon\Carbon::now()->startOfMonth();
-                    $daysInCurMonth = \Carbon\Carbon::now()->daysInMonth;
-                    $firstDayWeekIndex = ($startDayOfMonth->dayOfWeekIso);
-                @endphp
-
-                <div class="grid grid-cols-7 gap-1 text-[11px] font-semibold text-slate-700">
-                    @for($p = 1; $p < $firstDayWeekIndex; $p++)
-                        <span class="py-1 text-slate-300">-</span>
-                    @endfor
-
-                    @for($d = 1; $d <= $daysInCurMonth; $d++)
-                        @php
-                            $isToday = ($d === now()->day);
-                        @endphp
-                        <span class="py-1 rounded-lg {{ $isToday ? 'bg-brand-600 text-white font-extrabold shadow-sm' : 'hover:bg-slate-100' }}">
-                            {{ $d }}
-                        </span>
-                    @endfor
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Quick Access Matching Screenshot (6 Tiles) -->
-        <div class="custom-card p-6">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-                <h3 class="text-xs font-bold text-slate-900 tracking-tight">Quick Access</h3>
-            </div>
-
-            <div class="grid grid-cols-3 gap-3">
-                <a href="{{ route('tu.kelas.index') }}"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-brand-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Data Kelas</span>
-                </a>
-
-                <a href="{{ route('tu.siswa.index') }}"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Data Siswa</span>
-                </a>
-
-                <a href="{{ route('tu.guru.index') }}"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-purple-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Data Guru</span>
-                </a>
-
-                <a href="{{ route('tu.rekap.harian') }}"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-amber-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Rekap Harian</span>
-                </a>
-
-                <a href="{{ route('tu.rekap.bulanan') }}"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-sky-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Rekap Bulan</span>
-                </a>
-
-                <a href="{{ route('tu.rekap.harian', ['print' => 1]) }}" target="_blank"
-                    class="p-3 rounded-2xl bg-slate-50 hover:bg-rose-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
-                    <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-700 leading-tight">Cetak PDF</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- 3. Performance Overview Matching Screenshot -->
-        <div class="custom-card p-6 flex flex-col justify-between">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="text-xs font-bold text-slate-900 tracking-tight">Performance Overview</h3>
-                <a href="{{ route('tu.rekap.bulanan') }}" class="text-xs font-bold text-brand-600 hover:text-brand-700">
-                    View Details
-                </a>
-            </div>
-
-            @php
-                $totalRec = $hadirHariIni + $izinHariIni + $sakitHariIni + $alpaHariIni;
-                $pctH = $totalRec > 0 ? round(($hadirHariIni / $totalRec) * 100) : 0;
-                $pctI = $totalRec > 0 ? round(($izinHariIni / $totalRec) * 100) : 0;
-                $pctS = $totalRec > 0 ? round(($sakitHariIni / $totalRec) * 100) : 0;
-                $pctA = $totalRec > 0 ? round(($alpaHariIni / $totalRec) * 100) : 0;
-            @endphp
-
-            <div class="flex items-center justify-between pt-2">
-                <!-- Donut Chart with Center Percentage Text -->
-                <div class="relative w-32 h-32 flex-shrink-0">
-                    <canvas id="tuPerformanceChart"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span class="text-xl font-extrabold text-slate-900 leading-none">{{ $persenKehadiran }}%</span>
-                        <span class="text-[9px] text-slate-400 font-semibold mt-0.5">Kehadiran</span>
-                    </div>
-                </div>
-
-                <!-- Legend List Matching Screenshot -->
-                <div class="space-y-2 text-xs font-medium pl-3">
-                    <div class="flex items-center justify-between space-x-3">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            <span class="text-slate-600 text-[11px]">Hadir</span>
-                        </div>
-                        <span class="font-bold text-slate-800 text-[11px]">{{ $pctH }}%</span>
-                    </div>
-
-                    <div class="flex items-center justify-between space-x-3">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                            <span class="text-slate-600 text-[11px]">Izin</span>
-                        </div>
-                        <span class="font-bold text-slate-800 text-[11px]">{{ $pctI }}%</span>
-                    </div>
-
-                    <div class="flex items-center justify-between space-x-3">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                            <span class="text-slate-600 text-[11px]">Sakit</span>
-                        </div>
-                        <span class="font-bold text-slate-800 text-[11px]">{{ $pctS }}%</span>
-                    </div>
-
-                    <div class="flex items-center justify-between space-x-3">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                            <span class="text-slate-600 text-[11px]">Alpa</span>
-                        </div>
-                        <span class="font-bold text-slate-800 text-[11px]">{{ $pctA }}%</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    const ctx = document.getElementById('tuPerformanceChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Hadir', 'Izin', 'Sakit', 'Alpa'],
-            datasets: [{
-                data: [
-                    {{ $hadirHariIni ?: 1 }},
-                    {{ $izinHariIni }},
-                    {{ $sakitHariIni }},
-                    {{ $alpaHariIni }}
-                ],
-                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
-                borderWidth: 0,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '76%',
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: true }
-            }
-        }
-    });
-</script>
-@endpush

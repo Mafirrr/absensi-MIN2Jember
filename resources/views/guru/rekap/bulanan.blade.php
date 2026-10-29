@@ -31,7 +31,7 @@
                         <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
                         <div>
                             <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Kelas</span>
-                            <span class="inline-block px-3.5 py-2 rounded-xl bg-blue-50 text-brand-700 border border-blue-100 font-extrabold text-xs">
+                            <span class="inline-block px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 font-extrabold text-xs">
                                 Kelas {{ $selectedKelas->nama_kelas }}
                             </span>
                         </div>

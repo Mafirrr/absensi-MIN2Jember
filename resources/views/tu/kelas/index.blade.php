@@ -61,7 +61,7 @@
                                 {{ $kelas->waliKelas ? $kelas->waliKelas->name : '-' }}
                             </td>
                             <td class="py-3.5 px-5 text-center">
-                                <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-brand-700 font-extrabold text-[11px]">
+                                <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-[11px]">
                                     {{ $kelas->siswa_count }} Siswa
                                 </span>
                             </td>

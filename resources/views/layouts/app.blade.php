@@ -22,12 +22,21 @@
                     },
                     colors: {
                         brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            500: '#3b82f6',
-                            600: '#2563eb', // Vivid Royal Blue matching screenshot
-                            700: '#1d4ed8',
+                            50: '#E8F6EE',
+                            100: '#D1F0DE',
+                            500: '#10B981',
+                            600: '#0E8345', // Primary brand emerald matching screenshot
+                            700: '#0B6E3F',
+                            800: '#095A34',
+                        },
+                        emerald: {
+                            50: '#E8F6EE',
+                            100: '#D1F0DE',
+                            500: '#10B981',
+                            600: '#0E8345',
+                            700: '#0B6E3F',
+                            800: '#095A34',
+                            900: '#063B22',
                         }
                     }
                 }
@@ -39,220 +48,342 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f7fc; }
-        [x-cloak] { display: none !important; }
-        .sidebar-brand-gradient {
-            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F0F2F5;
         }
-        .custom-card {
+        [x-cloak] { display: none !important; }
+        .oripio-canvas {
             background-color: #ffffff;
-            border: 1px solid #edf2f7;
-            border-radius: 1.25rem;
-            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.08);
+            border-radius: 28px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .oripio-card, .custom-card {
+            background-color: #ffffff;
+            border: 1px solid #EDF0F3;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px -2px rgba(15, 23, 42, 0.03);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
         }
     </style>
     @stack('styles')
 </head>
-<body class="text-slate-800 min-h-screen flex antialiased">
+<body class="text-slate-800 min-h-screen p-2 sm:p-4 lg:p-6 antialiased">
 
-    <!-- Left Sidebar Matching Screenshot -->
-    <aside class="w-64 bg-brand-600 flex flex-col flex-shrink-0 min-h-screen shadow-xl z-20">
-        <!-- Blue Top Section with Graduation Cap -->
-        <div class="pt-7 pb-5 px-6 text-center text-white sidebar-brand-gradient">
-            <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-16 h-16 mx-auto mb-2.5 rounded-full object-cover shadow-lg shadow-brand-900/30 ring-2 ring-white/50">
-            <h1 class="text-xl font-extrabold tracking-wider text-white">SIABSEN</h1>
-            <p class="text-[11px] text-blue-100/90 font-medium tracking-tight mt-0.5">Sistem Informasi Absensi Sekolah</p>
-        </div>
+    <!-- Outer Rounded White App Container Matching Screenshot -->
+    <div class="oripio-canvas max-w-[1680px] mx-auto min-h-[calc(100vh-2rem)] flex flex-col md:flex-row overflow-hidden">
 
-        <!-- White Menu Container with Rounded Top Corners -->
-        <div class="flex-1 bg-white rounded-t-[28px] pt-6 pb-6 px-4 flex flex-col justify-between shadow-xs">
-            <nav class="space-y-1.5 overflow-y-auto">
-                @if(auth()->user()->isTU())
-                    <!-- TU Menu -->
-                    <a href="{{ route('tu.dashboard') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.dashboard') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        <span>Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('tu.rekap.harian') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.rekap.harian') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        <span>Rekap Harian</span>
-                    </a>
-
-                    <a href="{{ route('tu.rekap.bulanan') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.rekap.bulanan') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <span>Rekap Bulanan</span>
-                    </a>
-
-                    <a href="{{ route('tu.kelas.index') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.kelas.*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                        <span>Kelola Kelas</span>
-                    </a>
-
-                    <a href="{{ route('tu.siswa.index') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.siswa.*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <span>Kelola Siswa</span>
-                    </a>
-
-                    <a href="{{ route('tu.guru.index') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('tu.guru.*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                        <span>Kelola Guru</span>
-                    </a>
-                @else
-                    <!-- Guru Menu -->
-                    <a href="{{ route('guru.dashboard') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('guru.dashboard') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        <span>Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('guru.absensi.index') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('guru.absensi.*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                        <span>Input Absensi</span>
-                    </a>
-
-                    <a href="{{ route('guru.rekap.bulanan') }}"
-                        class="flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition {{ request()->routeIs('guru.rekap.*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'text-slate-600 hover:text-brand-600 hover:bg-blue-50/70' }}">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <span>Rekap Bulanan</span>
-                    </a>
-                @endif
-            </nav>
-
-            <!-- Logout Link Matching Screenshot -->
-            <div class="pt-4 border-t border-slate-100">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center space-x-3 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 w-full transition">
-                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0">
-        <!-- Top Navbar Matching Screenshot -->
-        <header class="h-20 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-10">
-            <!-- Left: Hamburger & Title -->
-            <div class="flex items-center space-x-4">
-                <button class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-                <h1 class="text-lg font-bold text-slate-900 tracking-tight">@yield('page_title', 'Dashboard')</h1>
-            </div>
-
-            <!-- Middle: Search Input Pill -->
-            <div class="hidden md:flex items-center w-72 lg:w-96">
-                <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative w-full">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="search" placeholder="Cari siswa atau kelas..."
-                        class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
-                </form>
-            </div>
-
-            <!-- Right: Notification & Profile -->
-            <div class="flex items-center space-x-6">
-                <!-- Notification Bell -->
-                <button class="relative p-2 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                    </svg>
-                    <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-brand-600 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">
-                        3
-                    </span>
-                </button>
-
-                <!-- User Profile Pill -->
-                <div class="flex items-center space-x-3 pl-2">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-blue-100">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                    <div class="text-left hidden sm:block">
-                        <p class="text-xs font-bold text-slate-900 leading-tight">Hello, {{ auth()->user()->name }}</p>
-                        <p class="text-[11px] text-slate-400 font-medium leading-tight mt-0.5">
-                            @if(auth()->user()->isTU())
-                                Tata Usaha &bull; Admin
-                            @else
-                                Guru &bull; Wali Kelas
-                            @endif
-                        </p>
-                    </div>
-                    <svg class="w-4 h-4 text-slate-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Body Content -->
-        <main class="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto">
-            <!-- Flash Message Alerts -->
-            @if(session('success'))
-                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center shadow-xs">
-                    <svg class="w-4 h-4 text-emerald-600 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center shadow-xs">
-                    <svg class="w-4 h-4 text-rose-600 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @endif
-
-            @yield('content')
-        </main>
-
-        <!-- Footer Matching Screenshot -->
-        <footer class="px-8 py-4 bg-white/70 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400">
+        <!-- Left Clean White Sidebar -->
+        <aside class="w-full md:w-64 lg:w-72 bg-white border-r border-slate-100 flex flex-col justify-between p-5 lg:p-6 flex-shrink-0">
             <div>
-                &copy; {{ date('Y') }} Sistem Informasi Absensi Siswa. All rights reserved.
+                <!-- Brand Header -->
+                <div class="flex items-center justify-between pb-6 border-b border-slate-100/80">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-9 h-9 rounded-full object-cover shadow-xs ring-1 ring-slate-200">
+                        <div>
+                            <span class="block text-base font-extrabold text-slate-900 tracking-tight leading-none">SIABSEN</span>
+                            <span class="text-[10px] font-semibold text-slate-400 leading-none mt-0.5 block">Sistem Absensi</span>
+                        </div>
+                    </div>
+                    <button class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 transition" title="Toggle Sidebar">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Navigation Groups -->
+                <div class="mt-6 space-y-6">
+
+                    <!-- Section: MAIN MENU -->
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Main Menu</span>
+                        <nav class="space-y-1">
+                            @if(auth()->user()->isTU())
+                                <a href="{{ route('tu.dashboard') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.dashboard') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.dashboard') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.dashboard') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                        </svg>
+                                        <span>Dashboard</span>
+                                    </div>
+                                </a>
+
+                                <a href="{{ route('tu.rekap.harian') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.rekap.harian') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.rekap.harian') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.rekap.harian') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Rekap Harian</span>
+                                    </div>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-medium">Hari ini</span>
+                                </a>
+
+                                <a href="{{ route('tu.rekap.bulanan') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.rekap.bulanan') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.rekap.bulanan') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.rekap.bulanan') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                        <span>Rekap Bulanan</span>
+                                    </div>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-medium">Bulan</span>
+                                </a>
+                            @else
+                                <a href="{{ route('guru.dashboard') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.dashboard') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.dashboard') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.dashboard') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                        </svg>
+                                        <span>Dashboard</span>
+                                    </div>
+                                </a>
+
+                                <a href="{{ route('guru.absensi.index') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.absensi.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.absensi.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.absensi.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span>Input Absensi</span>
+                                    </div>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold">Input</span>
+                                </a>
+
+                                <a href="{{ route('guru.rekap.bulanan') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.rekap.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.rekap.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.rekap.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                        <span>Rekap Bulanan</span>
+                                    </div>
+                                </a>
+                            @endif
+                        </nav>
+                    </div>
+
+                    <!-- Section: FEATURES / MANAJEMEN -->
+                    @if(auth()->user()->isTU())
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Manajemen Data</span>
+                            <nav class="space-y-1">
+                                <a href="{{ route('tu.kelas.index') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.kelas.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.kelas.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.kelas.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        <span>Kelola Kelas</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\Kelas::count() }}</span>
+                                </a>
+
+                                <a href="{{ route('tu.siswa.index') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.siswa.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.siswa.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.siswa.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <span>Kelola Siswa</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\Siswa::count() }}</span>
+                                </a>
+
+                                <a href="{{ route('tu.guru.index') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.guru.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.guru.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.guru.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>Kelola Guru</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\User::where('role', 'guru')->count() }}</span>
+                                </a>
+                            </nav>
+                        </div>
+                    @endif
+
+                    <!-- Section: GENERAL -->
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">General</span>
+                        <nav class="space-y-1">
+                            <a href="javascript:void(0)" onclick="alert('SIABSEN v2.0 - Sistem Informasi Absensi Digital terhubung dengan database MySQL. Dikembangkan khusus untuk akses Tata Usaha & Guru.')"
+                               class="group flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition">
+                                <div class="w-2 h-2"></div>
+                                <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Informasi Sistem</span>
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                        class="group w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                    <div class="w-2 h-2"></div>
+                                    <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    <span>Log out</span>
+                                </button>
+                            </form>
+                        </nav>
+                    </div>
+
+                </div>
             </div>
-            <div class="mt-1 sm:mt-0 font-medium">
-                Made with <span class="text-rose-500">❤️</span> for School
+
+            <!-- Bottom Forest Green Widget Card Matching Screenshot ("Upgrade Pro!" style) -->
+            <div class="mt-8 bg-gradient-to-br from-[#095A34] to-[#0E8345] rounded-2xl p-4 text-white shadow-sm relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold tracking-tight">T.A 2025/2026 🎉</span>
+                    </div>
+                    <p class="text-[11px] text-emerald-100/90 font-medium mt-1 leading-snug">
+                        Semester Ganjil &bull; Server MySQL Aktif
+                    </p>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center justify-center w-full py-1.5 px-3 rounded-xl bg-white text-[#0E8345] text-xs font-bold shadow-xs">
+                            ● Sistem Normal
+                        </span>
+                    </div>
+                </div>
+                <!-- Subtle circle pattern decoration in corner -->
+                <div class="absolute -right-4 -bottom-6 w-20 h-20 rounded-full bg-white/10 pointer-events-none"></div>
             </div>
-        </footer>
+
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0 bg-white">
+
+            <!-- Top Header Navbar Matching Screenshot -->
+            <header class="px-6 lg:px-8 py-5 border-b border-slate-100/80 flex items-center justify-between gap-4">
+                <!-- Search Bar (Oripio search pill style) -->
+                <div class="flex-1 max-w-md">
+                    <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" name="search" placeholder="Search..."
+                               class="w-full pl-9 pr-14 py-2 bg-slate-50 border border-slate-200/80 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                        <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[10px] font-bold text-slate-400">
+                            ⌘ K
+                        </span>
+                    </form>
+                </div>
+
+                <!-- Right Action Icons & User Profile -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Help Button -->
+                    <button type="button" onclick="alert('Pusat Bantuan SIABSEN: Hubungi staf TU jika mengalami kendala akun atau penugasan rombel.')"
+                            class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Bantuan">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+
+                    <!-- Message Button -->
+                    <button type="button" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Pesan">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+
+                    <!-- Bell Notification Button with Green Dot -->
+                    <div class="relative">
+                        <button type="button" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Notifikasi">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                        </button>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-600 ring-2 ring-white"></span>
+                    </div>
+
+                    <!-- User Avatar & Details Pill -->
+                    <div class="pl-2 flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                        <div class="hidden sm:block text-left">
+                            <span class="block text-xs font-bold text-slate-800 leading-tight">{{ auth()->user()->name }}</span>
+                            <span class="text-[10px] font-semibold text-slate-400 leading-none">
+                                {{ auth()->user()->isTU() ? 'Tata Usaha' : 'Guru / Wali Kelas' }}
+                            </span>
+                        </div>
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Body Container -->
+            <main class="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
+
+                <!-- Flash Notifications -->
+                @if(session('success'))
+                    <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold flex items-center space-x-2 shadow-xs">
+                        <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-800 text-xs font-semibold flex items-center space-x-2 shadow-xs">
+                        <svg class="w-4 h-4 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                @endif
+
+                @yield('content')
+            </main>
+
+            <!-- Footer matching minimalist aesthetic -->
+            <footer class="px-8 py-3.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400">
+                <div>
+                    &copy; {{ date('Y') }} SIABSEN &bull; Sistem Informasi Presensi Siswa
+                </div>
+                <div class="mt-1 sm:mt-0 font-medium">
+                    Platform Presensi Digital &bull; <span class="text-emerald-600 font-semibold">Aktif</span>
+                </div>
+            </footer>
+
+        </div>
     </div>
 
     @stack('scripts')
