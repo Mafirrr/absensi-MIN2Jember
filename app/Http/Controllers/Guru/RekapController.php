@@ -77,7 +77,8 @@ class RekapController extends Controller
                 ->groupBy('siswa_id');
 
             foreach ($siswaList as $siswa) {
-                $siswaAbsensi = $absensiRecords->get($siswa->id, collect());
+                $siswaAbsensi = $absensiRecords->get($siswa->id, collect())
+                    ->keyBy(fn ($a) => is_string($a->tanggal) ? substr($a->tanggal, 0, 10) : $a->tanggal->format('Y-m-d'));
                 $h = 0;
                 $i = 0;
                 $s = 0;
@@ -86,7 +87,7 @@ class RekapController extends Controller
                 $dailyStatus = [];
                 foreach ($monthDates as $cDate) {
                     $dStr = $cDate->format('Y-m-d');
-                    $record = $siswaAbsensi->firstWhere('tanggal', $dStr);
+                    $record = $siswaAbsensi->get($dStr);
                     $status = $record ? $record->status : null;
                     $dailyStatus[$cDate->day] = [
                         'status' => $status,

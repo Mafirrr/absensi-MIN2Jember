@@ -164,8 +164,9 @@ class DatabaseSeeder extends Seeder
             ['nis' => '3004', 'nama' => 'Maudy Ayunda', 'jk' => 'P'],
         ];
 
+        $createdSiswaXII = [];
         foreach ($siswaDataXII as $index => $item) {
-            Siswa::create([
+            $siswa = Siswa::create([
                 'nis' => $item['nis'],
                 'nisn' => '0067' . str_pad($item['nis'], 6, '0', STR_PAD_LEFT),
                 'nama_lengkap' => $item['nama'],
@@ -178,6 +179,33 @@ class DatabaseSeeder extends Seeder
                 'no_telepon_ortu' => '0813443322' . str_pad($index, 2, '0', STR_PAD_LEFT),
                 'status' => 'aktif',
             ]);
+            $createdSiswaXII[] = $siswa;
+        }
+
+        // Siswa untuk Kelas X TKJ 2
+        $siswaDataX2 = [
+            ['nis' => '4001', 'nama' => 'Bima Arya', 'jk' => 'L'],
+            ['nis' => '4002', 'nama' => 'Citra Kirana', 'jk' => 'P'],
+            ['nis' => '4003', 'nama' => 'Danang Prasetyo', 'jk' => 'L'],
+            ['nis' => '4004', 'nama' => 'Erina Gudono', 'jk' => 'P'],
+        ];
+
+        $createdSiswaX2 = [];
+        foreach ($siswaDataX2 as $index => $item) {
+            $siswa = Siswa::create([
+                'nis' => $item['nis'],
+                'nisn' => '0068' . str_pad($item['nis'], 6, '0', STR_PAD_LEFT),
+                'nama_lengkap' => $item['nama'],
+                'jenis_kelamin' => $item['jk'],
+                'kelas_id' => $kelas4->id,
+                'no_absen' => $index + 1,
+                'tempat_lahir' => 'Semarang',
+                'tanggal_lahir' => '2008-11-05',
+                'alamat' => 'Jl. Kenanga No. ' . ($index + 12) . ', Jakarta',
+                'no_telepon_ortu' => '0813998877' . str_pad($index, 2, '0', STR_PAD_LEFT),
+                'status' => 'aktif',
+            ]);
+            $createdSiswaX2[] = $siswa;
         }
 
         // 4. Seed Absensi 14 hari terakhir sampai hari ini
@@ -193,7 +221,6 @@ class DatabaseSeeder extends Seeder
 
             // Absensi Kelas X RPL 1
             foreach ($createdSiswaX as $idx => $s) {
-                // Pola status realistis
                 $status = 'hadir';
                 $catatan = null;
 
@@ -241,6 +268,49 @@ class DatabaseSeeder extends Seeder
                     'status' => $status,
                     'catatan' => $catatan,
                     'guru_id' => $guru2->id,
+                ]);
+            }
+
+            // Absensi Kelas XII TKJ 1
+            foreach ($createdSiswaXII as $idx => $s) {
+                $status = 'hadir';
+                $catatan = null;
+
+                if ($idx === 1 && $d % 4 === 0) {
+                    $status = 'izin';
+                    $catatan = 'Pemeriksaan kesehatan';
+                } elseif ($idx === 2 && $d === 2) {
+                    $status = 'sakit';
+                    $catatan = 'Demam';
+                }
+
+                Absensi::create([
+                    'siswa_id' => $s->id,
+                    'kelas_id' => $kelas3->id,
+                    'tanggal' => $dateStr,
+                    'status' => $status,
+                    'catatan' => $catatan,
+                    'guru_id' => $guru3->id,
+                ]);
+            }
+
+            // Absensi Kelas X TKJ 2
+            foreach ($createdSiswaX2 as $idx => $s) {
+                $status = 'hadir';
+                $catatan = null;
+
+                if ($idx === 0 && $d % 3 === 0) {
+                    $status = 'izin';
+                    $catatan = 'Urusan keluarga';
+                }
+
+                Absensi::create([
+                    'siswa_id' => $s->id,
+                    'kelas_id' => $kelas4->id,
+                    'tanggal' => $dateStr,
+                    'status' => $status,
+                    'catatan' => $catatan,
+                    'guru_id' => $guru1->id,
                 ]);
             }
         }
