@@ -37,9 +37,7 @@
         
         <!-- Header Branding Matching Screenshot -->
         <div class="text-center mb-8">
-            <div class="w-20 h-20 mx-auto mb-3.5 rounded-2xl bg-white p-2 shadow-lg shadow-slate-200/60 border border-slate-100 flex items-center justify-center">
-                <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-full h-full object-contain rounded-xl">
-            </div>
+            <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-20 h-20 mx-auto mb-3.5 rounded-full object-cover shadow-lg shadow-slate-300/70 ring-4 ring-white">
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">SIABSEN</h1>
             <p class="text-xs text-slate-500 font-medium mt-1">Sistem Informasi Absensi Sekolah Digital</p>
         </div>

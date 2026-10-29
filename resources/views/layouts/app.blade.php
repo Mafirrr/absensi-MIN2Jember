@@ -59,9 +59,7 @@
     <aside class="w-64 bg-brand-600 flex flex-col flex-shrink-0 min-h-screen shadow-xl z-20">
         <!-- Blue Top Section with Graduation Cap -->
         <div class="pt-7 pb-5 px-6 text-center text-white sidebar-brand-gradient">
-            <div class="w-16 h-16 mx-auto mb-2.5 rounded-2xl bg-white p-1.5 shadow-md shadow-brand-700/40 border border-white/30 flex items-center justify-center">
-                <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-full h-full object-contain rounded-xl">
-            </div>
+            <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-16 h-16 mx-auto mb-2.5 rounded-full object-cover shadow-lg shadow-brand-900/30 ring-2 ring-white/50">
             <h1 class="text-xl font-extrabold tracking-wider text-white">SIABSEN</h1>
             <p class="text-[11px] text-blue-100/90 font-medium tracking-tight mt-0.5">Sistem Informasi Absensi Sekolah</p>
         </div>
