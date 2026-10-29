@@ -22,10 +22,10 @@ class RekapController extends Controller
         $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
 
         $query = Absensi::with(['siswa', 'kelas', 'guru'])
-            ->where('tanggal', $tanggal);
+            ->where('absensi.tanggal', $tanggal);
 
         if ($kelasId) {
-            $query->where('kelas_id', $kelasId);
+            $query->where('absensi.kelas_id', $kelasId);
         }
 
         $absensiList = $query->join('siswa', 'absensi.siswa_id', '=', 'siswa.id')
