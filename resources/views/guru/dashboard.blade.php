@@ -355,148 +355,213 @@
 
             </div>
 
-            <!-- RIGHT COLUMN (7 of 12 cols) -->
-            <div class="lg:col-span-7 space-y-5">
-
-                <!-- Widget 1: Overview Bar Chart (EXACT match to screenshot) -->
-                <div class="oripio-card p-5">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
-                            <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran Kelas</h3>
-                        </div>
-
-                        <div class="flex items-center space-x-3">
-                            <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
-                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                                <span class="text-[11px]">Kehadiran</span>
+            <!-- RIGHT COLUMN (7 of 12 cols): Overview Kehadiran -->
+            <div class="lg:col-span-7">
+                <div class="oripio-card p-5 h-full flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
+                                <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran Kelas</h3>
                             </div>
 
-                            <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
-                                7 Hari Terakhir ▾
-                            </span>
-
-                            <button class="text-slate-400 hover:text-slate-600">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <circle cx="10" cy="4" r="1.5" />
-                                    <circle cx="10" cy="10" r="1.5" />
-                                    <circle cx="10" cy="16" r="1.5" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
-                    <div class="pt-6 pb-2">
-                        <div class="h-44 flex items-end justify-between gap-3 px-2">
-                            @php
-                                $maxH = max(1, ...$trendHadir);
-                            @endphp
-                            @foreach($trendDates as $idx => $dateLabel)
-                                @php
-                                    $val = $trendHadir[$idx] ?? 0;
-                                    $heightPct = round(($val / $maxH) * 85);
-                                    $isToday = $idx === (count($trendDates) - 1);
-                                @endphp
-                                <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
-                                    @if($isToday)
-                                        <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                            <span>{{ $val }} Hadir ({{ $persenHadirHariIni }}%)</span>
-                                        </div>
-                                    @endif
-
-                                    <div class="w-full max-w-[36px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
-                                         style="height: {{ max(12, $heightPct) }}%">
-                                    </div>
-
-                                    <span class="text-[10px] font-bold mt-2 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
-                                        {{ $dateLabel }}
-                                    </span>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                    <span class="text-[11px]">Kehadiran</span>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Widget 2: Recent Transaction Style -> Statistik Kehadiran Per Status Siswa -->
-                <div class="oripio-card p-5">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-slate-400">👥</span>
-                            <h3 class="text-xs font-bold text-slate-900 tracking-tight">Statistik Kehadiran Per Status Siswa (Bulan Ini)</h3>
-                        </div>
-                        <a href="{{ route('guru.rekap.bulanan', ['kelas_id' => $selectedKelas->id]) }}" class="text-[11px] font-bold text-slate-500 hover:text-slate-800 flex items-center space-x-1">
-                            <span>Rekap Matriks</span>
-                            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
+                                <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
+                                    7 Hari Terakhir ▾
+                                </span>
 
-                    <div class="overflow-x-auto mt-2">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead>
-                                <tr class="text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-100">
-                                    <th class="py-2.5 px-3">No / Siswa</th>
-                                    <th class="py-2.5 px-2 text-center">H</th>
-                                    <th class="py-2.5 px-2 text-center">I</th>
-                                    <th class="py-2.5 px-2 text-center">S</th>
-                                    <th class="py-2.5 px-2 text-center">A</th>
-                                    <th class="py-2.5 px-3 text-center">Persentase</th>
-                                    <th class="py-2.5 px-3 text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100/80">
-                                @forelse($statistikPerSiswa as $s)
-                                    <tr class="hover:bg-slate-50/60 transition">
-                                        <td class="py-3 px-3">
-                                            <div class="flex items-center space-x-2.5">
-                                                <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold flex items-center justify-center">
-                                                    {{ $s['no_absen'] }}
-                                                </span>
-                                                <div>
-                                                    <div class="font-bold text-slate-800">{{ $s['nama_lengkap'] }}</div>
-                                                    <div class="text-[10px] text-slate-400">NIS: {{ $s['nis'] }} &bull; {{ $s['jenis_kelamin'] == 'L' ? 'Laki-laki' : 'Perempuan' }}</div>
-                                                </div>
+                                <button class="text-slate-400 hover:text-slate-600">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="4" r="1.5" />
+                                        <circle cx="10" cy="10" r="1.5" />
+                                        <circle cx="10" cy="16" r="1.5" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
+                        <div class="pt-8 pb-4">
+                            <div class="h-56 flex items-end justify-between gap-3 px-3">
+                                @php
+                                    $maxH = max(1, ...$trendHadir);
+                                @endphp
+                                @foreach($trendDates as $idx => $dateLabel)
+                                    @php
+                                        $val = $trendHadir[$idx] ?? 0;
+                                        $heightPct = round(($val / $maxH) * 85);
+                                        $isToday = $idx === (count($trendDates) - 1);
+                                    @endphp
+                                    <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
+                                        @if($isToday)
+                                            <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                                <span>{{ $val }} Hadir ({{ $persenHadirHariIni }}%)</span>
                                             </div>
-                                        </td>
-                                        <td class="py-3 px-2 text-center font-bold text-emerald-700">{{ $s['hadir'] }}</td>
-                                        <td class="py-3 px-2 text-center font-bold text-blue-700">{{ $s['izin'] }}</td>
-                                        <td class="py-3 px-2 text-center font-bold text-amber-700">{{ $s['sakit'] }}</td>
-                                        <td class="py-3 px-2 text-center font-bold text-rose-700">{{ $s['alpa'] }}</td>
-                                        <td class="py-3 px-3 text-center">
-                                            <span class="font-extrabold text-slate-800 text-xs">{{ $s['persentase'] }}%</span>
-                                        </td>
-                                        <td class="py-3 px-3 text-center">
-                                            @if($s['persentase'] >= 90)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
-                                                    ● Baik
-                                                </span>
-                                            @elseif($s['persentase'] >= 75)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
-                                                    ● Cukup
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700">
-                                                    ● Perlu Perhatian
-                                                </span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="py-6 text-center text-slate-400 text-xs">
-                                            Belum ada data siswa di kelas ini.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                        @endif
+
+                                        <div class="w-full max-w-[42px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
+                                             style="height: {{ max(14, $heightPct) }}%">
+                                        </div>
+
+                                        <span class="text-[11px] font-bold mt-2.5 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
+                                            {{ $dateLabel }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar Info Tiles -->
+                    <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100/80 text-center">
+                        <div class="p-2.5 rounded-xl bg-slate-50/80">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Hadir 7 Hari</span>
+                            <span class="text-sm font-extrabold text-slate-800">{{ array_sum($trendHadir) }} Presensi</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50/80">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">Rata-rata Harian</span>
+                            <span class="text-sm font-extrabold text-emerald-700">{{ count($trendHadir) > 0 ? round(array_sum($trendHadir) / count($trendHadir), 1) : 0 }} Siswa</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50/80">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">Status Konsistensi</span>
+                            <span class="text-sm font-extrabold text-emerald-600">● Stabil</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FULL WIDTH TABLE DI BAWAH: Statistik Kehadiran Per Status Siswa (Bulan Ini) -->
+        <div class="oripio-card p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100/80 gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center font-bold text-base shadow-2xs">
+                        👥
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">Statistik Kehadiran Per Status Siswa (Bulan Ini)</h3>
+                        <p class="text-[11px] text-slate-400 font-medium">Rekapitulasi lengkap presensi per siswa Kelas {{ $selectedKelas->nama_kelas }} periode {{ Carbon\Carbon::now()->translatedFormat('F Y') }}</p>
                     </div>
                 </div>
 
+                <div class="flex items-center space-x-3">
+                    <!-- Legend Indicators -->
+                    <div class="hidden md:flex items-center space-x-2 text-[10px] font-bold">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> H: Hadir
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-200">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> I: Izin
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> S: Sakit
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> A: Alpa
+                        </span>
+                    </div>
+
+                    <a href="{{ route('guru.rekap.bulanan', ['kelas_id' => $selectedKelas->id]) }}"
+                       class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/80 text-xs font-bold transition shadow-2xs">
+                        <span>Buka Rekap Matriks Lengkap</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
             </div>
+
+            <div class="overflow-x-auto mt-4">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/70 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-100">
+                            <th class="py-3 px-4 text-center w-14">No</th>
+                            <th class="py-3 px-4">NIS</th>
+                            <th class="py-3 px-5">Nama Lengkap Siswa</th>
+                            <th class="py-3 px-4 text-center">L/P</th>
+                            <th class="py-3 px-3 text-center bg-emerald-50/60 text-emerald-800 font-extrabold border-l border-emerald-100">H (Hadir)</th>
+                            <th class="py-3 px-3 text-center bg-blue-50/60 text-blue-800 font-extrabold border-l border-blue-100">I (Izin)</th>
+                            <th class="py-3 px-3 text-center bg-amber-50/60 text-amber-800 font-extrabold border-l border-amber-100">S (Sakit)</th>
+                            <th class="py-3 px-3 text-center bg-rose-50/60 text-rose-800 font-extrabold border-l border-rose-100">A (Alpa)</th>
+                            <th class="py-3 px-4 text-center border-l border-slate-100">Total Hari</th>
+                            <th class="py-3 px-5 text-center">Persentase</th>
+                            <th class="py-3 px-4 text-center">Status Kehadiran</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100/80">
+                        @forelse($statistikPerSiswa as $s)
+                            <tr class="hover:bg-slate-50/60 transition">
+                                <td class="py-3.5 px-4 text-center font-bold text-slate-500">
+                                    {{ $s['no_absen'] }}
+                                </td>
+                                <td class="py-3.5 px-4 font-mono text-slate-500">
+                                    {{ $s['nis'] }}
+                                </td>
+                                <td class="py-3.5 px-5 font-bold text-slate-900">
+                                    {{ $s['nama_lengkap'] }}
+                                </td>
+                                <td class="py-3.5 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded-md font-bold text-[10px] {{ $s['jenis_kelamin'] == 'L' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700' }}">
+                                        {{ $s['jenis_kelamin'] == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                    </span>
+                                </td>
+                                <td class="py-3.5 px-3 text-center font-extrabold text-emerald-700 bg-emerald-50/30 border-l border-emerald-100">
+                                    {{ $s['hadir'] }}
+                                </td>
+                                <td class="py-3.5 px-3 text-center font-bold text-blue-700 bg-blue-50/30 border-l border-blue-100">
+                                    {{ $s['izin'] }}
+                                </td>
+                                <td class="py-3.5 px-3 text-center font-bold text-amber-700 bg-amber-50/30 border-l border-amber-100">
+                                    {{ $s['sakit'] }}
+                                </td>
+                                <td class="py-3.5 px-3 text-center font-extrabold text-rose-700 bg-rose-50/30 border-l border-rose-100">
+                                    {{ $s['alpa'] }}
+                                </td>
+                                <td class="py-3.5 px-4 text-center font-bold text-slate-600 border-l border-slate-100">
+                                    {{ $s['total'] }} Hari
+                                </td>
+                                <td class="py-3.5 px-5 text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="font-extrabold text-slate-800 text-xs w-10 text-right">{{ $s['persentase'] }}%</span>
+                                        <div class="w-16 bg-slate-100 rounded-full h-1.5 overflow-hidden hidden sm:block">
+                                            <div class="bg-emerald-600 h-1.5 rounded-full" style="width: {{ min(100, $s['persentase']) }}%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3.5 px-4 text-center">
+                                    @if($s['persentase'] >= 90)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            ● Baik
+                                        </span>
+                                    @elseif($s['persentase'] >= 75)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                            ● Cukup
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                            ● Perlu Perhatian
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="11" class="py-8 text-center text-slate-400 text-xs">
+                                    Belum ada data siswa di kelas ini.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         </div>
 

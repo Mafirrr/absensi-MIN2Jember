@@ -321,145 +321,190 @@
 
         </div>
 
-        <!-- RIGHT COLUMN (7 of 12 cols): Overview Bar Chart & Recent Transaction Style -->
-        <div class="lg:col-span-7 space-y-5">
-
-            <!-- Widget 1: Overview Bar Chart (EXACT match to screenshot) -->
-            <div class="oripio-card p-5">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
-                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran</h3>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            <span class="text-[11px]">Kehadiran</span>
+        <!-- RIGHT COLUMN (7 of 12 cols): Overview Kehadiran -->
+        <div class="lg:col-span-7">
+            <div class="oripio-card p-5 h-full flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
+                            <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran Sekolah</h3>
                         </div>
 
-                        <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
-                            7 Hari Terakhir ▾
-                        </span>
-
-                        <button class="text-slate-400 hover:text-slate-600">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <circle cx="10" cy="4" r="1.5" />
-                                <circle cx="10" cy="10" r="1.5" />
-                                <circle cx="10" cy="16" r="1.5" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
-                <div class="pt-6 pb-2">
-                    <div class="h-44 flex items-end justify-between gap-3 px-2">
-                        @php
-                            $maxHadir = max(1, ...$trendHadir);
-                        @endphp
-                        @foreach($dates as $idx => $dateLabel)
-                            @php
-                                $val = $trendHadir[$idx] ?? 0;
-                                $heightPct = round(($val / $maxHadir) * 85);
-                                $isToday = $idx === (count($dates) - 1);
-                            @endphp
-                            <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
-                                <!-- Tooltip badge for active / today bar matching screenshot -->
-                                @if($isToday)
-                                    <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                        <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
-                                    </div>
-                                @endif
-
-                                <!-- Pillar Bar -->
-                                <div class="w-full max-w-[36px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
-                                     style="height: {{ max(12, $heightPct) }}%">
-                                </div>
-
-                                <!-- Label below bar -->
-                                <span class="text-[10px] font-bold mt-2 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
-                                    {{ $dateLabel }}
-                                </span>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                <span class="text-[11px]">Kehadiran</span>
                             </div>
-                        @endforeach
+
+                            <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
+                                7 Hari Terakhir ▾
+                            </span>
+
+                            <button class="text-slate-400 hover:text-slate-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <circle cx="10" cy="4" r="1.5" />
+                                    <circle cx="10" cy="10" r="1.5" />
+                                    <circle cx="10" cy="16" r="1.5" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
+                    <div class="pt-8 pb-4">
+                        <div class="h-56 flex items-end justify-between gap-3 px-3">
+                            @php
+                                $maxHadir = max(1, ...$trendHadir);
+                            @endphp
+                            @foreach($dates as $idx => $dateLabel)
+                                @php
+                                    $val = $trendHadir[$idx] ?? 0;
+                                    $heightPct = round(($val / $maxHadir) * 85);
+                                    $isToday = $idx === (count($dates) - 1);
+                                @endphp
+                                <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
+                                    @if($isToday)
+                                        <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                            <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
+                                        </div>
+                                    @endif
+
+                                    <div class="w-full max-w-[42px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
+                                         style="height: {{ max(14, $heightPct) }}%">
+                                    </div>
+
+                                    <span class="text-[11px] font-bold mt-2.5 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
+                                        {{ $dateLabel }}
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Bar Info Tiles -->
+                <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100/80 text-center">
+                    <div class="p-2.5 rounded-xl bg-slate-50/80">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Presensi 7 Hari</span>
+                        <span class="text-sm font-extrabold text-slate-800">{{ array_sum($trendHadir) }} Siswa</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-50/80">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Rata-rata Presensi</span>
+                        <span class="text-sm font-extrabold text-emerald-700">{{ count($trendHadir) > 0 ? round(array_sum($trendHadir) / count($trendHadir), 1) : 0 }} / Hari</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-50/80">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Status Konsistensi</span>
+                        <span class="text-sm font-extrabold text-emerald-600">● Optimal</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Widget 2: Recent Transaction Style -> Status Presensi Rombel Hari Ini -->
-            <div class="oripio-card p-5">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-slate-400">📋</span>
-                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Status Presensi Rombel Hari Ini</h3>
-                    </div>
-                    <a href="{{ route('tu.rekap.harian') }}" class="text-[11px] font-bold text-slate-500 hover:text-slate-800 flex items-center space-x-1">
-                        <span>Filter</span>
-                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="overflow-x-auto mt-2">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-100">
-                                <th class="py-2.5 px-3">Kelas & Wali</th>
-                                <th class="py-2.5 px-2 text-center">H / I / S / A</th>
-                                <th class="py-2.5 px-3 text-center">Kehadiran</th>
-                                <th class="py-2.5 px-3 text-center">Status</th>
-                                <th class="py-2.5 px-2 text-right"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100/80">
-                            @forelse($kelasList as $item)
-                                <tr class="hover:bg-slate-50/60 transition">
-                                    <td class="py-3 px-3">
-                                        <div class="font-bold text-slate-800">{{ $item['nama_kelas'] }}</div>
-                                        <div class="text-[10px] text-slate-400">{{ $item['wali_kelas'] }}</div>
-                                    </td>
-                                    <td class="py-3 px-2 text-center text-[11px] font-semibold text-slate-600">
-                                        <span class="text-emerald-700 font-bold">{{ $item['hadir'] }}</span> /
-                                        <span class="text-blue-700 font-bold">{{ $item['izin'] }}</span> /
-                                        <span class="text-amber-700 font-bold">{{ $item['sakit'] }}</span> /
-                                        <span class="text-rose-700 font-bold">{{ $item['alpa'] }}</span>
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        <span class="font-extrabold text-slate-800 text-xs">{{ $item['persen'] }}%</span>
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        @if($item['sudah_input'])
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
-                                                ● Selesai
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">
-                                                ○ Belum Diisi
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-2 text-right">
-                                        <a href="{{ route('tu.rekap.harian', ['kelas_id' => $item['id']]) }}" class="text-slate-400 hover:text-emerald-600 text-sm font-bold">
-                                            &hellip;
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="py-6 text-center text-slate-400 text-xs">
-                                        Belum ada rombel kelas.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
+
+    </div>
+
+    <!-- FULL WIDTH TABLE DI BAWAH: Status Presensi Rombel Hari Ini -->
+    <div class="oripio-card p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100/80 gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center font-bold text-base shadow-2xs">
+                    📋
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900 tracking-tight">Status Presensi Rombel Seluruh Kelas Hari Ini</h3>
+                    <p class="text-[11px] text-slate-400 font-medium">Pemantauan progres input presensi per rombel kelas tanggal {{ now()->translatedFormat('l, d F Y') }}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('tu.rekap.harian') }}"
+                   class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/80 text-xs font-bold transition shadow-2xs">
+                    <span>Buka Rekap Harian Lengkap</span>
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/70 text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-100">
+                        <th class="py-3 px-5">Rombel Kelas</th>
+                        <th class="py-3 px-5">Wali Kelas</th>
+                        <th class="py-3 px-3 text-center">Total Siswa</th>
+                        <th class="py-3 px-3 text-center bg-emerald-50/60 text-emerald-800 font-extrabold border-l border-emerald-100">H (Hadir)</th>
+                        <th class="py-3 px-3 text-center bg-blue-50/60 text-blue-800 font-extrabold border-l border-blue-100">I (Izin)</th>
+                        <th class="py-3 px-3 text-center bg-amber-50/60 text-amber-800 font-extrabold border-l border-amber-100">S (Sakit)</th>
+                        <th class="py-3 px-3 text-center bg-rose-50/60 text-rose-800 font-extrabold border-l border-rose-100">A (Alpa)</th>
+                        <th class="py-3 px-4 text-center border-l border-slate-100">Tingkat Hadir</th>
+                        <th class="py-3 px-5 text-center">Status Pengisian</th>
+                        <th class="py-3 px-4 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100/80">
+                    @forelse($kelasList as $item)
+                        <tr class="hover:bg-slate-50/60 transition">
+                            <td class="py-3.5 px-5 font-bold text-slate-900">
+                                {{ $item['nama_kelas'] }}
+                            </td>
+                            <td class="py-3.5 px-5 text-slate-500 font-medium">
+                                {{ $item['wali_kelas'] }}
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-700">
+                                {{ $item['total_siswa'] }} Siswa
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-emerald-700 bg-emerald-50/30 border-l border-emerald-100">
+                                {{ $item['hadir'] }}
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-bold text-blue-700 bg-blue-50/30 border-l border-blue-100">
+                                {{ $item['izin'] }}
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-bold text-amber-700 bg-amber-50/30 border-l border-amber-100">
+                                {{ $item['sakit'] }}
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-rose-700 bg-rose-50/30 border-l border-rose-100">
+                                {{ $item['alpa'] }}
+                            </td>
+                            <td class="py-3.5 px-4 text-center">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span class="font-extrabold text-slate-800 text-xs w-8 text-right">{{ $item['persen'] }}%</span>
+                                    <div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden hidden sm:block">
+                                        <div class="bg-emerald-600 h-1.5 rounded-full" style="width: {{ $item['persen'] }}%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-5 text-center">
+                                @if($item['sudah_input'])
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        ● Selesai Diisi
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">
+                                        ○ Belum Diisi
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-3.5 px-4 text-right">
+                                <a href="{{ route('tu.rekap.harian', ['kelas_id' => $item['id']]) }}"
+                                   class="inline-flex items-center text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline">
+                                    Lihat &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10" class="py-8 text-center text-slate-400 text-xs">
+                                Belum ada rombel kelas terdaftar.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     </div>
 
