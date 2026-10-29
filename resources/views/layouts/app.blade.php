@@ -50,20 +50,14 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F0F2F5;
+            background-color: #FAFBFD;
         }
         [x-cloak] { display: none !important; }
-        .oripio-canvas {
-            background-color: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
         .oripio-card, .custom-card {
             background-color: #ffffff;
-            border: 1px solid #EDF0F3;
-            border-radius: 18px;
-            box-shadow: 0 2px 10px -2px rgba(15, 23, 42, 0.03);
+            border: 1px solid #EEF2F6;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
         }
         /* Custom scrollbar */
         ::-webkit-scrollbar {
@@ -83,13 +77,13 @@
     </style>
     @stack('styles')
 </head>
-<body class="text-slate-800 min-h-screen p-2 sm:p-4 lg:p-6 antialiased">
+<body class="text-slate-800 bg-[#FAFBFD] min-h-screen antialiased">
 
-    <!-- Outer Rounded White App Container Matching Screenshot -->
-    <div class="oripio-canvas max-w-[1680px] mx-auto min-h-[calc(100vh-2rem)] flex flex-col md:flex-row overflow-hidden">
+    <!-- Edge-to-Edge Fullscreen App Layout -->
+    <div class="flex flex-col md:flex-row min-h-screen w-full">
 
         <!-- Left Clean White Sidebar -->
-        <aside class="w-full md:w-64 lg:w-72 bg-white border-r border-slate-100 flex flex-col justify-between p-5 lg:p-6 flex-shrink-0">
+        <aside class="w-full md:w-64 lg:w-72 bg-white border-r border-slate-100 flex flex-col justify-between p-5 lg:p-6 flex-shrink-0 md:min-h-screen md:sticky md:top-0 md:h-screen md:overflow-y-auto">
             <div>
                 <!-- Brand Header -->
                 <div class="flex items-center justify-between pb-6 border-b border-slate-100/80">
@@ -283,10 +277,10 @@
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-w-0 bg-white">
+        <div class="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
 
             <!-- Top Header Navbar Matching Screenshot -->
-            <header class="px-6 lg:px-8 py-5 border-b border-slate-100/80 flex items-center justify-between gap-4">
+            <header class="px-6 lg:px-8 py-4 bg-white border-b border-slate-100 flex items-center justify-between gap-4 sticky top-0 z-20">
                 <!-- Search Bar (Oripio search pill style) -->
                 <div class="flex-1 max-w-md">
                     <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative">
@@ -304,31 +298,29 @@
                 </div>
 
                 <!-- Right Action Icons & User Profile -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <!-- Help Button -->
+                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <!-- Help Button (clean borderless) -->
                     <button type="button" onclick="alert('Pusat Bantuan SIABSEN: Hubungi staf TU jika mengalami kendala akun atau penugasan rombel.')"
-                            class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Bantuan">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            class="p-2 text-slate-400 hover:text-slate-700 transition" title="Bantuan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </button>
 
-                    <!-- Message Button -->
-                    <button type="button" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Pesan">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <!-- Message Button (clean borderless) -->
+                    <button type="button" class="p-2 text-slate-400 hover:text-slate-700 transition" title="Pesan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </button>
 
-                    <!-- Bell Notification Button with Green Dot -->
-                    <div class="relative">
-                        <button type="button" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition" title="Notifikasi">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                        </button>
+                    <!-- Bell Notification Button with Green Dot (clean borderless) -->
+                    <button type="button" class="relative p-2 text-slate-400 hover:text-slate-700 transition" title="Notifikasi">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-600 ring-2 ring-white"></span>
-                    </div>
+                    </button>
 
                     <!-- User Avatar & Details Pill -->
                     <div class="pl-2 flex items-center space-x-2.5">
