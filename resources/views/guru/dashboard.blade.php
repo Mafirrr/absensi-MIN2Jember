@@ -173,7 +173,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Left 2 Cols: Statistik Kehadiran Per Status Siswa -->
-            <div class="lg:col-span-2 custom-card p-6 flex flex-col justify-between">
+            <div id="tabel-statistik-siswa" class="lg:col-span-2 custom-card p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                         <h3 class="text-sm font-bold text-slate-900 tracking-tight">Statistik Kehadiran Per Status Siswa</h3>
@@ -395,34 +395,37 @@
                     </a>
 
                     <!-- Tile 4: Daftar Siswa -->
-                    <div class="p-3 rounded-2xl bg-slate-50 flex flex-col items-center justify-center text-center border border-slate-100">
-                        <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-1.5">
+                    <a href="#tabel-statistik-siswa"
+                        class="p-3 rounded-2xl bg-slate-50 hover:bg-amber-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
+                        <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
                         </div>
                         <span class="text-[10px] font-bold text-slate-700 leading-tight">{{ $totalSiswa }} Siswa</span>
-                    </div>
+                    </a>
 
                     <!-- Tile 5: Info Kelas -->
-                    <div class="p-3 rounded-2xl bg-slate-50 flex flex-col items-center justify-center text-center border border-slate-100">
-                        <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-1.5">
+                    <a href="{{ route('guru.rekap.bulanan', ['kelas_id' => $selectedKelas->id]) }}"
+                        class="p-3 rounded-2xl bg-slate-50 hover:bg-sky-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100">
+                        <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
                         </div>
-                        <span class="text-[10px] font-bold text-slate-700 leading-tight">Kelas {{ $selectedKelas->tingkat }}</span>
-                    </div>
+                        <span class="text-[10px] font-bold text-slate-700 leading-tight">Kelas {{ $selectedKelas->nama_kelas }}</span>
+                    </a>
 
                     <!-- Tile 6: Panduan -->
-                    <div class="p-3 rounded-2xl bg-slate-50 flex flex-col items-center justify-center text-center border border-slate-100">
-                        <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-1.5">
+                    <button type="button" onclick="document.getElementById('modalPanduanGuru').classList.remove('hidden')"
+                        class="p-3 rounded-2xl bg-slate-50 hover:bg-rose-50/80 transition flex flex-col items-center justify-center text-center group border border-slate-100 w-full">
+                        <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <span class="text-[10px] font-bold text-slate-700 leading-tight">Panduan</span>
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -494,6 +497,41 @@
 
     @endif
 
+</div>
+
+<!-- Modal Panduan Guru -->
+<div id="modalPanduanGuru" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-100 shadow-2xl text-xs space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-blue-100 text-brand-600 flex items-center justify-center">ℹ</span>
+                Panduan Penggunaan Guru / Wali Kelas
+            </h3>
+            <button onclick="document.getElementById('modalPanduanGuru').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 text-base">✕</button>
+        </div>
+
+        <div class="space-y-3 text-slate-600 leading-relaxed">
+            <div class="p-3 rounded-xl bg-blue-50/70 border border-blue-100">
+                <strong class="text-brand-900 block mb-1">1. Hak Akses Kelas</strong>
+                <p>Guru dan Wali Kelas hanya memiliki hak akses untuk menginput dan melihat rekap di kelas yang telah ditugaskan oleh Tata Usaha.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-100">
+                <strong class="text-emerald-900 block mb-1">2. Penginputan Presensi</strong>
+                <p>Klik menu <strong>Input Absensi</strong> atau tombol cepat di Dashboard. Anda dapat memanfaatkan fitur <strong>"Tandai Semua Hadir"</strong> lalu cukup mengubah siswa yang izin, sakit, atau alpa sebelum menekan <strong>Simpan Absensi</strong>.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-purple-50/70 border border-purple-100">
+                <strong class="text-purple-900 block mb-1">3. Rekapitulasi & Cetak</strong>
+                <p>Di menu <strong>Rekap Bulanan</strong>, Anda dapat melihat matriks kalender harian serta mencetak laporan resmi bertanda tangan wali kelas.</p>
+            </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex justify-end">
+            <button type="button" onclick="document.getElementById('modalPanduanGuru').classList.add('hidden')"
+                class="px-5 py-2 rounded-xl bg-brand-600 text-white font-bold hover:bg-brand-700 transition">
+                Mengerti
+            </button>
+        </div>
+    </div>
 </div>
 @endsection
 

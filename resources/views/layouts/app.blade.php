@@ -175,15 +175,15 @@
 
             <!-- Middle: Search Input Pill -->
             <div class="hidden md:flex items-center w-72 lg:w-96">
-                <div class="relative w-full">
+                <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative w-full">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </span>
-                    <input type="text" placeholder="Search anything..."
-                        class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
-                </div>
+                    <input type="text" name="search" placeholder="Cari siswa atau kelas..."
+                        class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                </form>
             </div>
 
             <!-- Right: Notification & Profile -->
