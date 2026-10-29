@@ -58,11 +58,9 @@
     <!-- Left Sidebar Matching Screenshot -->
     <aside class="w-64 bg-brand-600 flex flex-col flex-shrink-0 min-h-screen shadow-xl z-20">
         <!-- Blue Top Section with Graduation Cap -->
-        <div class="pt-8 pb-6 px-6 text-center text-white sidebar-brand-gradient">
-            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/25 shadow-inner">
-                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" />
-                </svg>
+        <div class="pt-7 pb-5 px-6 text-center text-white sidebar-brand-gradient">
+            <div class="w-16 h-16 mx-auto mb-2.5 rounded-2xl bg-white p-1.5 shadow-md shadow-brand-700/40 border border-white/30 flex items-center justify-center">
+                <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-full h-full object-contain rounded-xl">
             </div>
             <h1 class="text-xl font-extrabold tracking-wider text-white">SIABSEN</h1>
             <p class="text-[11px] text-blue-100/90 font-medium tracking-tight mt-0.5">Sistem Informasi Absensi Sekolah</p>

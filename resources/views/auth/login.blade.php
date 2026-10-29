@@ -37,10 +37,8 @@
         
         <!-- Header Branding Matching Screenshot -->
         <div class="text-center mb-8">
-            <div class="w-16 h-16 mx-auto mb-3.5 rounded-2xl bg-gradient-to-tr from-brand-700 via-brand-600 to-blue-400 text-white flex items-center justify-center shadow-lg shadow-brand-600/30">
-                <svg class="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" />
-                </svg>
+            <div class="w-20 h-20 mx-auto mb-3.5 rounded-2xl bg-white p-2 shadow-lg shadow-slate-200/60 border border-slate-100 flex items-center justify-center">
+                <img src="{{ asset('logo.jpeg') }}" alt="Logo Sekolah" class="w-full h-full object-contain rounded-xl">
             </div>
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">SIABSEN</h1>
             <p class="text-xs text-slate-500 font-medium mt-1">Sistem Informasi Absensi Sekolah Digital</p>
