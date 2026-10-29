@@ -7,20 +7,20 @@
 <div class="space-y-6">
 
     @if(!$selectedKelas)
-        <div class="bg-white border border-stone-200 p-6 rounded-xl text-stone-600 text-xs">
-            <p class="font-semibold text-stone-900 mb-1">Akses Dibatasi:</p>
-            <p>Anda belum memiliki kelas yang ditugaskan untuk diinput absensinya. Hubungi pihak Tata Usaha.</p>
+        <div class="custom-card p-8 text-center text-slate-500">
+            <h3 class="text-base font-bold text-slate-800">Akses Dibatasi</h3>
+            <p class="text-xs text-slate-500 mt-1">Anda belum memiliki kelas yang ditugaskan untuk diinput absensinya.</p>
         </div>
     @else
 
         <!-- Controls Bar -->
-        <div class="bg-white p-4 rounded-xl border border-stone-200">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="custom-card p-5">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <form method="GET" action="{{ route('guru.absensi.index') }}" class="flex flex-wrap items-center gap-3">
                     @if($kelasList->count() > 1)
                         <div>
-                            <label class="block text-[10px] font-medium text-stone-500 mb-1">Kelas</label>
-                            <select name="kelas_id" onchange="this.form.submit()" class="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs text-stone-800">
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Rombel Kelas</label>
+                            <select name="kelas_id" onchange="this.form.submit()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
                                 @foreach($kelasList as $k)
                                     <option value="{{ $k->id }}" {{ $selectedKelas->id == $k->id ? 'selected' : '' }}>
                                         Kelas {{ $k->nama_kelas }}
@@ -31,38 +31,47 @@
                     @else
                         <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
                         <div>
-                            <span class="block text-[10px] font-medium text-stone-500 mb-1">Kelas</span>
-                            <span class="inline-block px-2.5 py-1.5 rounded-lg bg-stone-100 text-stone-800 font-semibold text-xs">
+                            <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Rombel Kelas</span>
+                            <span class="inline-block px-3.5 py-2 rounded-xl bg-blue-50 text-brand-700 border border-blue-100 font-extrabold text-xs">
                                 Kelas {{ $selectedKelas->nama_kelas }}
                             </span>
                         </div>
                     @endif
 
                     <div>
-                        <label class="block text-[10px] font-medium text-stone-500 mb-1">Tanggal</label>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Tanggal Absensi</label>
                         <input type="date" name="tanggal" value="{{ $tanggal }}" onchange="this.form.submit()"
-                            class="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs text-stone-800">
+                            class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
                     </div>
                 </form>
 
-                <div class="flex items-center space-x-2 pt-2 md:pt-0">
+                <div class="flex items-center space-x-2.5 pt-2 lg:pt-0">
                     <button type="button" onclick="markAll('hadir')"
-                        class="px-3 py-1.5 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 text-stone-700 text-xs font-medium transition">
-                        Tandai Semua Hadir
+                        class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Tandai Semua Hadir</span>
                     </button>
 
                     <button type="submit" form="formAbsensi"
-                        class="px-4 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium transition">
-                        Simpan Absensi
+                        class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-md shadow-brand-600/25 flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        <span>Simpan Absensi</span>
                     </button>
                 </div>
             </div>
         </div>
 
         @if($existingAbsensi->isNotEmpty())
-            <div class="p-3 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 text-xs flex items-center justify-between">
-                <span>Data absensi tanggal <strong>{{ \Carbon\Carbon::parse($tanggal)->translatedFormat('d F Y') }}</strong> sudah tercatat. Simpan ulang untuk memperbarui.</span>
-                <span class="text-[10px] uppercase font-semibold text-stone-500 tracking-wider">Tersimpan</span>
+            <div class="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-brand-900 text-xs font-medium flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+                    <span>Data absensi tanggal <strong>{{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}</strong> sudah pernah tersimpan. Anda dapat memperbarui status jika ada perubahan.</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full bg-brand-600 text-white font-extrabold text-[10px] uppercase tracking-wider">Mode Edit</span>
             </div>
         @endif
 
@@ -72,38 +81,38 @@
             <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
             <input type="hidden" name="tanggal" value="{{ $tanggal }}">
 
-            <div class="bg-white rounded-xl border border-stone-200 overflow-hidden">
-                <div class="p-3.5 bg-stone-50/70 border-b border-stone-200 flex items-center justify-between">
-                    <h3 class="text-xs font-semibold text-stone-900 uppercase tracking-wider">
-                        Daftar Siswa ({{ $siswaList->count() }})
+            <div class="custom-card overflow-hidden">
+                <div class="p-4 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-tight">
+                        Daftar Siswa Kelas {{ $selectedKelas->nama_kelas }} ({{ $siswaList->count() }} Siswa)
                     </h3>
-                    <span class="text-[11px] text-stone-400">Pilih status kehadiran</span>
+                    <span class="text-xs text-slate-400">Pilih status kehadiran siswa</span>
                 </div>
 
-                <div class="divide-y divide-stone-100">
+                <div class="divide-y divide-slate-100">
                     @forelse($siswaList as $idx => $siswa)
                         @php
                             $currentStatus = old("absensi.{$siswa->id}.status", $existingAbsensi[$siswa->id]->status ?? 'hadir');
                             $currentCatatan = old("absensi.{$siswa->id}.catatan", $existingAbsensi[$siswa->id]->catatan ?? '');
                         @endphp
-                        <div class="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-stone-50/40">
+                        <div class="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-blue-50/20 transition">
                             <!-- Siswa Info -->
-                            <div class="flex items-center space-x-3 min-w-[200px]">
-                                <span class="w-6 text-center text-xs text-stone-400 font-medium">
+                            <div class="flex items-center space-x-3.5 min-w-[220px]">
+                                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 font-extrabold text-xs flex items-center justify-center flex-shrink-0">
                                     {{ $siswa->no_absen ?? ($idx + 1) }}
-                                </span>
+                                </div>
                                 <div>
-                                    <p class="text-xs font-medium text-stone-900">{{ $siswa->nama_lengkap }}</p>
-                                    <span class="text-[11px] text-stone-400 font-mono">NIS: {{ $siswa->nis }}</span>
+                                    <h4 class="text-xs font-bold text-slate-900 leading-tight">{{ $siswa->nama_lengkap }}</h4>
+                                    <span class="text-[11px] text-slate-400 font-mono">NIS: {{ $siswa->nis }} &bull; {{ $siswa->jenis_kelamin == 'L' ? 'L' : 'P' }}</span>
                                 </div>
                             </div>
 
-                            <!-- Radio Selectors Minimalist -->
-                            <div class="flex items-center space-x-1.5">
+                            <!-- Radio Selectors -->
+                            <div class="flex items-center space-x-2">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="absensi[{{ $siswa->id }}][status]" value="hadir"
                                         class="peer sr-only status-hadir" {{ $currentStatus == 'hadir' ? 'checked' : '' }}>
-                                    <div class="px-2.5 py-1 rounded text-xs font-medium border border-stone-200 text-stone-600 peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900 hover:bg-stone-50 transition">
+                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 hover:bg-slate-50 transition shadow-2xs">
                                         Hadir
                                     </div>
                                 </label>
@@ -111,7 +120,7 @@
                                 <label class="cursor-pointer">
                                     <input type="radio" name="absensi[{{ $siswa->id }}][status]" value="izin"
                                         class="peer sr-only status-izin" {{ $currentStatus == 'izin' ? 'checked' : '' }}>
-                                    <div class="px-2.5 py-1 rounded text-xs font-medium border border-stone-200 text-stone-600 peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900 hover:bg-stone-50 transition">
+                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 hover:bg-slate-50 transition shadow-2xs">
                                         Izin
                                     </div>
                                 </label>
@@ -119,7 +128,7 @@
                                 <label class="cursor-pointer">
                                     <input type="radio" name="absensi[{{ $siswa->id }}][status]" value="sakit"
                                         class="peer sr-only status-sakit" {{ $currentStatus == 'sakit' ? 'checked' : '' }}>
-                                    <div class="px-2.5 py-1 rounded text-xs font-medium border border-stone-200 text-stone-600 peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900 hover:bg-stone-50 transition">
+                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 hover:bg-slate-50 transition shadow-2xs">
                                         Sakit
                                     </div>
                                 </label>
@@ -127,31 +136,32 @@
                                 <label class="cursor-pointer">
                                     <input type="radio" name="absensi[{{ $siswa->id }}][status]" value="alpa"
                                         class="peer sr-only status-alpa" {{ $currentStatus == 'alpa' ? 'checked' : '' }}>
-                                    <div class="px-2.5 py-1 rounded text-xs font-medium border border-stone-200 text-stone-600 peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900 hover:bg-stone-50 transition">
+                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 hover:bg-slate-50 transition shadow-2xs">
                                         Alpa
                                     </div>
                                 </label>
                             </div>
 
                             <!-- Catatan -->
-                            <div class="w-full sm:w-52">
+                            <div class="w-full sm:w-56">
                                 <input type="text" name="absensi[{{ $siswa->id }}][catatan]" value="{{ $currentCatatan }}"
                                     placeholder="Keterangan opsional"
-                                    class="w-full px-2.5 py-1 bg-white border border-stone-200 rounded text-xs text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-900">
+                                    class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
                             </div>
                         </div>
                     @empty
-                        <div class="p-6 text-center text-xs text-stone-400">
-                            Tidak ada siswa di kelas ini.
+                        <div class="p-8 text-center text-xs text-slate-400">
+                            Tidak ada siswa aktif di kelas ini.
                         </div>
                     @endforelse
                 </div>
 
                 @if($siswaList->isNotEmpty())
-                    <div class="p-3 bg-stone-50 border-t border-stone-200 flex justify-end">
+                    <div class="p-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400 font-medium">Periksa kembali data sebelum menyimpan.</span>
                         <button type="submit"
-                            class="px-4 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium transition">
-                            Simpan Perubahan
+                            class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/25 transition">
+                            Simpan Seluruh Absensi Kelas Ini
                         </button>
                     </div>
                 @endif

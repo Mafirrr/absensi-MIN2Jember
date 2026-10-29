@@ -7,19 +7,19 @@
 <div class="space-y-6">
 
     @if(!$selectedKelas)
-        <div class="bg-white border border-stone-200 p-6 rounded-xl text-stone-600 text-xs">
+        <div class="custom-card p-8 text-center text-slate-500">
             <p>Anda belum ditugaskan mengelola rombel kelas.</p>
         </div>
     @else
 
         <!-- Filter Bar -->
-        <div class="bg-white p-4 rounded-xl border border-stone-200">
+        <div class="custom-card p-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <form method="GET" action="{{ route('guru.rekap.bulanan') }}" class="flex flex-wrap items-center gap-3">
                     @if($kelasList->count() > 1)
                         <div>
-                            <label class="block text-[10px] font-medium text-stone-500 mb-1">Kelas</label>
-                            <select name="kelas_id" onchange="this.form.submit()" class="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs text-stone-800">
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Kelas</label>
+                            <select name="kelas_id" onchange="this.form.submit()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
                                 @foreach($kelasList as $k)
                                     <option value="{{ $k->id }}" {{ $selectedKelas->id == $k->id ? 'selected' : '' }}>
                                         Kelas {{ $k->nama_kelas }}
@@ -30,16 +30,16 @@
                     @else
                         <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
                         <div>
-                            <span class="block text-[10px] font-medium text-stone-500 mb-1">Kelas</span>
-                            <span class="inline-block px-2.5 py-1.5 rounded-lg bg-stone-100 text-stone-800 font-semibold text-xs">
+                            <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Kelas</span>
+                            <span class="inline-block px-3.5 py-2 rounded-xl bg-blue-50 text-brand-700 border border-blue-100 font-extrabold text-xs">
                                 Kelas {{ $selectedKelas->nama_kelas }}
                             </span>
                         </div>
                     @endif
 
                     <div>
-                        <label class="block text-[10px] font-medium text-stone-500 mb-1">Bulan</label>
-                        <select name="bulan" onchange="this.form.submit()" class="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs text-stone-800">
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Bulan</label>
+                        <select name="bulan" onchange="this.form.submit()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
                             @foreach(range(1, 12) as $m)
                                 <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
                                     {{ \Carbon\Carbon::create(null, $m)->translatedFormat('F') }}
@@ -49,8 +49,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-medium text-stone-500 mb-1">Tahun</label>
-                        <select name="tahun" onchange="this.form.submit()" class="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs text-stone-800">
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Tahun</label>
+                        <select name="tahun" onchange="this.form.submit()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
                             @foreach(range(now()->year - 2, now()->year + 1) as $y)
                                 <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
                                     {{ $y }}
@@ -61,70 +61,82 @@
                 </form>
 
                 <a href="{{ route('guru.rekap.bulanan', ['bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $selectedKelas->id, 'print' => 1]) }}" target="_blank"
-                    class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-lg text-xs font-medium transition self-start sm:self-auto">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-flex items-center space-x-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-md shadow-brand-600/25 transition self-start sm:self-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    <span>Cetak Rekap</span>
+                    <span>Cetak Lembar Rekap</span>
                 </a>
             </div>
         </div>
 
         <!-- Metric Badges Row -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-white p-3.5 rounded-xl border border-stone-200">
-                <span class="text-[11px] font-medium text-stone-500">Total Hadir (H)</span>
-                <p class="text-xl font-semibold text-stone-900 mt-0.5">{{ $totalHadirBulan }}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="custom-card p-4 flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs flex-shrink-0">H</div>
+                <div>
+                    <span class="block text-[11px] font-bold text-slate-400 uppercase">Hadir (H)</span>
+                    <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalHadirBulan }}</p>
+                </div>
             </div>
-            <div class="bg-white p-3.5 rounded-xl border border-stone-200">
-                <span class="text-[11px] font-medium text-stone-500">Total Izin (I)</span>
-                <p class="text-xl font-semibold text-stone-900 mt-0.5">{{ $totalIzinBulan }}</p>
+            <div class="custom-card p-4 flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center font-bold text-xs flex-shrink-0">I</div>
+                <div>
+                    <span class="block text-[11px] font-bold text-slate-400 uppercase">Izin (I)</span>
+                    <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalIzinBulan }}</p>
+                </div>
             </div>
-            <div class="bg-white p-3.5 rounded-xl border border-stone-200">
-                <span class="text-[11px] font-medium text-stone-500">Total Sakit (S)</span>
-                <p class="text-xl font-semibold text-stone-900 mt-0.5">{{ $totalSakitBulan }}</p>
+            <div class="custom-card p-4 flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs flex-shrink-0">S</div>
+                <div>
+                    <span class="block text-[11px] font-bold text-slate-400 uppercase">Sakit (S)</span>
+                    <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalSakitBulan }}</p>
+                </div>
             </div>
-            <div class="bg-white p-3.5 rounded-xl border border-stone-200">
-                <span class="text-[11px] font-medium text-stone-500">Total Alpa (A)</span>
-                <p class="text-xl font-semibold text-stone-900 mt-0.5">{{ $totalAlpaBulan }}</p>
+            <div class="custom-card p-4 flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-xs flex-shrink-0">A</div>
+                <div>
+                    <span class="block text-[11px] font-bold text-slate-400 uppercase">Alpa (A)</span>
+                    <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalAlpaBulan }}</p>
+                </div>
             </div>
         </div>
 
         <!-- Matriks Bulanan -->
-        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden">
-            <div class="p-3.5 border-b border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                <span class="font-medium text-stone-900">
+        <div class="custom-card overflow-hidden">
+            <div class="p-4 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-800">
                     Kelas {{ $selectedKelas->nama_kelas }} &bull; {{ \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->translatedFormat('F Y') }}
                 </span>
-                <div class="flex items-center space-x-3 text-[11px]">
-                    <span>H: Hadir</span>
-                    <span>I: Izin</span>
-                    <span>S: Sakit</span>
-                    <span>A: Alpa</span>
+                <div class="flex items-center space-x-3 font-bold text-[10px]">
+                    <span class="text-emerald-700">H: Hadir</span>
+                    <span class="text-brand-700">I: Izin</span>
+                    <span class="text-amber-700">S: Sakit</span>
+                    <span class="text-rose-700">A: Alpa</span>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-center border-collapse text-xs">
                     <thead>
-                        <tr class="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium">
-                            <th class="py-2 px-3 text-left sticky left-0 bg-stone-50 z-10 w-44">Nama Siswa</th>
+                        <tr class="bg-slate-50/80 border-b border-slate-100 text-slate-400 font-bold">
+                            <th class="py-3 px-3 text-left sticky left-0 bg-slate-50/90 z-10 w-44">Nama Siswa</th>
                             @foreach($monthDates as $date)
-                                <th class="py-2 px-1 w-6 {{ $date->isWeekend() ? 'bg-stone-200/50 text-stone-400' : '' }}">
+                                <th class="py-3 px-1 w-6 {{ $date->isWeekend() ? 'bg-slate-100/70 text-slate-300' : '' }}">
                                     {{ $date->day }}
                                 </th>
                             @endforeach
-                            <th class="py-2 px-1.5 font-semibold bg-stone-100">H</th>
-                            <th class="py-2 px-1.5 font-semibold bg-stone-100">I</th>
-                            <th class="py-2 px-1.5 font-semibold bg-stone-100">S</th>
-                            <th class="py-2 px-1.5 font-semibold bg-stone-100">A</th>
-                            <th class="py-2 px-2 font-semibold bg-stone-100">%</th>
+                            <th class="py-3 px-2 font-extrabold bg-blue-50 text-brand-700">H</th>
+                            <th class="py-3 px-2 font-extrabold bg-blue-50 text-brand-700">I</th>
+                            <th class="py-3 px-2 font-extrabold bg-blue-50 text-brand-700">S</th>
+                            <th class="py-3 px-2 font-extrabold bg-blue-50 text-brand-700">A</th>
+                            <th class="py-3 px-2.5 font-extrabold bg-blue-50 text-brand-800">%</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-stone-100">
+                    <tbody class="divide-y divide-slate-100">
                         @forelse($matrix as $row)
-                            <tr class="hover:bg-stone-50/50">
-                                <td class="py-2 px-3 text-left font-medium text-stone-900 sticky left-0 bg-white hover:bg-stone-50 z-10 border-r border-stone-100 truncate max-w-xs">
+                            <tr class="hover:bg-slate-50/70 transition">
+                                <td class="py-2.5 px-3 text-left font-bold text-slate-900 sticky left-0 bg-white hover:bg-slate-50 z-10 border-r border-slate-100 truncate max-w-xs">
                                     {{ $row['siswa']->nama_lengkap }}
                                 </td>
                                 @foreach($monthDates as $date)
@@ -132,24 +144,24 @@
                                         $dayData = $row['daily'][$date->day];
                                         $st = $dayData['status'];
                                     @endphp
-                                    <td class="py-2 px-1 {{ $dayData['is_weekend'] ? 'bg-stone-100/50' : '' }}">
-                                        @if($st === 'hadir') <span class="font-medium text-stone-900">H</span>
-                                        @elseif($st === 'izin') <span class="font-medium text-stone-600">I</span>
-                                        @elseif($st === 'sakit') <span class="font-medium text-stone-600">S</span>
+                                    <td class="py-2.5 px-1 {{ $dayData['is_weekend'] ? 'bg-slate-50/60' : '' }}">
+                                        @if($st === 'hadir') <span class="font-extrabold text-emerald-600">H</span>
+                                        @elseif($st === 'izin') <span class="font-bold text-brand-600">I</span>
+                                        @elseif($st === 'sakit') <span class="font-bold text-amber-600">S</span>
                                         @elseif($st === 'alpa') <span class="font-bold text-rose-600">A</span>
-                                        @else <span class="text-stone-300">-</span>
+                                        @else <span class="text-slate-200">-</span>
                                         @endif
                                     </td>
                                 @endforeach
-                                <td class="py-2 px-1.5 font-semibold text-stone-900">{{ $row['h'] }}</td>
-                                <td class="py-2 px-1.5 text-stone-600">{{ $row['i'] }}</td>
-                                <td class="py-2 px-1.5 text-stone-600">{{ $row['s'] }}</td>
-                                <td class="py-2 px-1.5 text-stone-600">{{ $row['a'] }}</td>
-                                <td class="py-2 px-2 font-semibold text-stone-900">{{ $row['persen'] }}%</td>
+                                <td class="py-2.5 px-2 font-extrabold text-slate-800 bg-blue-50/30">{{ $row['h'] }}</td>
+                                <td class="py-2.5 px-2 font-bold text-slate-600 bg-blue-50/30">{{ $row['i'] }}</td>
+                                <td class="py-2.5 px-2 font-bold text-slate-600 bg-blue-50/30">{{ $row['s'] }}</td>
+                                <td class="py-2.5 px-2 font-bold text-slate-600 bg-blue-50/30">{{ $row['a'] }}</td>
+                                <td class="py-2.5 px-2.5 font-extrabold text-slate-900 bg-blue-50/40">{{ $row['persen'] }}%</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ count($monthDates) + 6 }}" class="py-6 text-center text-stone-400">
+                                <td colspan="{{ count($monthDates) + 6 }}" class="py-8 text-center text-slate-400">
                                     Tidak ada data siswa.
                                 </td>
                             </tr>
