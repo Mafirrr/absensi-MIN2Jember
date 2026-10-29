@@ -55,3 +55,4 @@ class AuthController extends Controller
         return redirect()->intended(route('guru.dashboard'));
     }
 }
+

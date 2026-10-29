@@ -114,3 +114,4 @@ class AbsensiController extends Controller
         ])->with('success', "Absensi kelas {$kelas->nama_kelas} untuk tanggal {$tglFormatted} berhasil disimpan!");
     }
 }
+

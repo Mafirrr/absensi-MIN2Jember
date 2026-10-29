@@ -44,3 +44,4 @@ class Kelas extends Model
         return $this->hasMany(Absensi::class, 'kelas_id');
     }
 }
+

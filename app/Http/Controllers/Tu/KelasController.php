@@ -82,3 +82,4 @@ class KelasController extends Controller
         return redirect()->route('tu.kelas.index')->with('success', "Kelas {$nama} berhasil dihapus.");
     }
 }
+

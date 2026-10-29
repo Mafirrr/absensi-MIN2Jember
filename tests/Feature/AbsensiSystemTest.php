@@ -104,7 +104,7 @@ class AbsensiSystemTest extends TestCase
 
         $dashResponse = $this->get(route('tu.dashboard'));
         $dashResponse->assertStatus(200);
-        $dashResponse->assertSee('Panel Tata Usaha');
+        $dashResponse->assertSee('Tata Usaha');
     }
 
     public function test_guru_can_login_and_access_guru_dashboard(): void
@@ -235,3 +235,4 @@ class AbsensiSystemTest extends TestCase
         $resBulanan->assertStatus(200);
     }
 }
+

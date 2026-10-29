@@ -82,3 +82,4 @@ class GuruController extends Controller
         return redirect()->route('tu.guru.index')->with('success', "Guru {$name} berhasil dihapus.");
     }
 }
+

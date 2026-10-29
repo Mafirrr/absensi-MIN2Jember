@@ -43,3 +43,4 @@ class Absensi extends Model
         return $this->belongsTo(User::class, 'guru_id');
     }
 }
+
