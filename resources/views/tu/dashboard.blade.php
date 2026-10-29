@@ -337,11 +337,24 @@
                                 <span class="text-[11px]">Kehadiran</span>
                             </div>
 
-                            <span class="text-[11px] font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
-                                7 Hari Terakhir ▾
-                            </span>
+                            <!-- Interactive Filter Periode Dropdown -->
+                            <form method="GET" action="{{ route('tu.dashboard') }}" class="inline-flex items-center">
+                                <div class="relative">
+                                    <select name="periode" onchange="this.form.submit()"
+                                            class="appearance-none text-[11px] font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 pl-2.5 pr-6 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer transition shadow-2xs">
+                                        <option value="7" {{ $periode == '7' ? 'selected' : '' }}>7 Hari Terakhir</option>
+                                        <option value="14" {{ $periode == '14' ? 'selected' : '' }}>14 Hari Terakhir</option>
+                                        <option value="30" {{ $periode == '30' ? 'selected' : '' }}>30 Hari Terakhir</option>
+                                        <option value="bulan_ini" {{ $periode == 'bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
+                                    </select>
+                                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400 text-[8px]">
+                                        ▼
+                                    </span>
+                                </div>
+                            </form>
 
-                            <button class="text-slate-400 hover:text-slate-600">
+                            <button type="button" onclick="alert('Overview statistik kehadiran berdasarkan catatan presensi pada rentang periode yang dipilih.')"
+                                    class="text-slate-400 hover:text-slate-600 p-1 rounded-lg" title="Info Grafik">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <circle cx="10" cy="4" r="1.5" />
                                     <circle cx="10" cy="10" r="1.5" />
@@ -353,7 +366,7 @@
 
                     <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
                     <div class="pt-8 pb-4">
-                        <div class="h-56 flex items-end justify-between gap-3 px-3">
+                        <div class="h-56 flex items-end justify-between gap-1.5 sm:gap-2.5 px-2 overflow-x-auto">
                             @php
                                 $maxHadir = max(1, ...$trendHadir);
                             @endphp
@@ -363,19 +376,23 @@
                                     $heightPct = round(($val / $maxHadir) * 85);
                                     $isToday = $idx === (count($dates) - 1);
                                 @endphp
-                                <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
+                                <div class="flex-1 min-w-[20px] max-w-[42px] flex flex-col items-center group relative h-full justify-end">
                                     @if($isToday)
                                         <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                             <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
                                         </div>
+                                    @else
+                                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute -top-7 mb-1 z-20 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none">
+                                            <span>{{ $val }} Hadir</span>
+                                        </div>
                                     @endif
 
-                                    <div class="w-full max-w-[42px] rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
+                                    <div class="w-full rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
                                          style="height: {{ max(14, $heightPct) }}%">
                                     </div>
 
-                                    <span class="text-[11px] font-bold mt-2.5 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
+                                    <span class="text-[10px] sm:text-[11px] font-bold mt-2.5 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
                                         {{ $dateLabel }}
                                     </span>
                                 </div>
@@ -387,7 +404,7 @@
                 <!-- Bottom Bar Info Tiles -->
                 <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100/80 text-center">
                     <div class="p-2.5 rounded-xl bg-slate-50/80">
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Presensi 7 Hari</span>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Presensi ({{ $periodeLabel }})</span>
                         <span class="text-sm font-extrabold text-slate-800">{{ array_sum($trendHadir) }} Siswa</span>
                     </div>
                     <div class="p-2.5 rounded-xl bg-slate-50/80">

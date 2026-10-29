@@ -100,22 +100,78 @@ class DashboardController extends Controller
             }
         }
 
-        // Tren 7 hari terakhir untuk rombel kelas yang dipilih
+        // Filter periode tren kehadiran
+        $periode = $request->query('periode', $request->query('filter', '7'));
         $trendDates = [];
         $trendHadir = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $d = Carbon::today()->subDays($i);
-            $dStr = $d->format('Y-m-d');
-            $trendDates[] = $d->translatedFormat('d M');
 
-            if ($selectedKelas) {
-                $count = Absensi::where('kelas_id', $selectedKelas->id)
-                    ->where('tanggal', $dStr)
-                    ->where('status', 'hadir')
-                    ->count();
-                $trendHadir[] = $count;
-            } else {
-                $trendHadir[] = 0;
+        if ($periode === '14') {
+            $periodeLabel = '14 Hari';
+            for ($i = 13; $i >= 0; $i--) {
+                $d = Carbon::today()->subDays($i);
+                $dStr = $d->format('Y-m-d');
+                $trendDates[] = $d->translatedFormat('d M');
+                if ($selectedKelas) {
+                    $count = Absensi::where('kelas_id', $selectedKelas->id)
+                        ->where('tanggal', $dStr)
+                        ->where('status', 'hadir')
+                        ->count();
+                    $trendHadir[] = $count;
+                } else {
+                    $trendHadir[] = 0;
+                }
+            }
+        } elseif ($periode === '30') {
+            $periodeLabel = '30 Hari';
+            for ($i = 29; $i >= 0; $i--) {
+                $d = Carbon::today()->subDays($i);
+                $dStr = $d->format('Y-m-d');
+                $trendDates[] = $d->translatedFormat('d M');
+                if ($selectedKelas) {
+                    $count = Absensi::where('kelas_id', $selectedKelas->id)
+                        ->where('tanggal', $dStr)
+                        ->where('status', 'hadir')
+                        ->count();
+                    $trendHadir[] = $count;
+                } else {
+                    $trendHadir[] = 0;
+                }
+            }
+        } elseif ($periode === 'bulan_ini') {
+            $periodeLabel = 'Bulan Ini';
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::today();
+            $curr = $startDate->copy();
+            while ($curr->lte($endDate)) {
+                $dStr = $curr->format('Y-m-d');
+                $trendDates[] = $curr->translatedFormat('d M');
+                if ($selectedKelas) {
+                    $count = Absensi::where('kelas_id', $selectedKelas->id)
+                        ->where('tanggal', $dStr)
+                        ->where('status', 'hadir')
+                        ->count();
+                    $trendHadir[] = $count;
+                } else {
+                    $trendHadir[] = 0;
+                }
+                $curr->addDay();
+            }
+        } else {
+            $periode = '7';
+            $periodeLabel = '7 Hari';
+            for ($i = 6; $i >= 0; $i--) {
+                $d = Carbon::today()->subDays($i);
+                $dStr = $d->format('Y-m-d');
+                $trendDates[] = $d->translatedFormat('d M');
+                if ($selectedKelas) {
+                    $count = Absensi::where('kelas_id', $selectedKelas->id)
+                        ->where('tanggal', $dStr)
+                        ->where('status', 'hadir')
+                        ->count();
+                    $trendHadir[] = $count;
+                } else {
+                    $trendHadir[] = 0;
+                }
             }
         }
 
@@ -135,6 +191,8 @@ class DashboardController extends Controller
             'totalAlpaBulanIni',
             'trendDates',
             'trendHadir',
+            'periode',
+            'periodeLabel',
             'today',
             'currentMonth',
             'currentYear'
