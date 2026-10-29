@@ -254,26 +254,6 @@
 
                 </div>
             </div>
-
-            <!-- Bottom Forest Green Widget Card Matching Screenshot ("Upgrade Pro!" style) -->
-            <div class="mt-8 bg-gradient-to-br from-[#095A34] to-[#0E8345] rounded-2xl p-4 text-white shadow-sm relative overflow-hidden">
-                <div class="relative z-10">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-extrabold tracking-tight">T.A 2025/2026 🎉</span>
-                    </div>
-                    <p class="text-[11px] text-emerald-100/90 font-medium mt-1 leading-snug">
-                        Semester Ganjil &bull; Server MySQL Aktif
-                    </p>
-                    <div class="mt-3">
-                        <span class="inline-flex items-center justify-center w-full py-1.5 px-3 rounded-xl bg-white text-[#0E8345] text-xs font-bold shadow-xs">
-                            ● Sistem Normal
-                        </span>
-                    </div>
-                </div>
-                <!-- Subtle circle pattern decoration in corner -->
-                <div class="absolute -right-4 -bottom-6 w-20 h-20 rounded-full bg-white/10 pointer-events-none"></div>
-            </div>
-
         </aside>
 
         <!-- Main Content Area -->
@@ -297,45 +277,16 @@
                     </form>
                 </div>
 
-                <!-- Right Action Icons & User Profile -->
-                <div class="flex items-center space-x-1 sm:space-x-2">
-                    <!-- Help Button (clean borderless) -->
-                    <button type="button" onclick="alert('Pusat Bantuan SIABSEN: Hubungi staf TU jika mengalami kendala akun atau penugasan rombel.')"
-                            class="p-2 text-slate-400 hover:text-slate-700 transition" title="Bantuan">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </button>
-
-                    <!-- Message Button (clean borderless) -->
-                    <button type="button" class="p-2 text-slate-400 hover:text-slate-700 transition" title="Pesan">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </button>
-
-                    <!-- Bell Notification Button with Green Dot (clean borderless) -->
-                    <button type="button" class="relative p-2 text-slate-400 hover:text-slate-700 transition" title="Notifikasi">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-600 ring-2 ring-white"></span>
-                    </button>
-
-                    <!-- User Avatar & Details Pill -->
-                    <div class="pl-2 flex items-center space-x-2.5">
-                        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
-                        <div class="hidden sm:block text-left">
-                            <span class="block text-xs font-bold text-slate-800 leading-tight">{{ auth()->user()->name }}</span>
-                            <span class="text-[10px] font-semibold text-slate-400 leading-none">
-                                {{ auth()->user()->isTU() ? 'Tata Usaha' : 'Guru / Wali Kelas' }}
-                            </span>
-                        </div>
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
+                <!-- User Profile (Tanpa Card / Icon Bulat) -->
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <div class="hidden sm:block text-left">
+                        <span class="block text-xs font-bold text-slate-800 leading-tight">{{ auth()->user()->name }}</span>
+                        <span class="text-[10px] font-semibold text-slate-400 leading-none">
+                            {{ auth()->user()->isTU() ? 'Tata Usaha' : 'Guru / Wali Kelas' }}
+                        </span>
                     </div>
                 </div>
             </header>
