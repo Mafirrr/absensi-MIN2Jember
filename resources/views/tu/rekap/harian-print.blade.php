@@ -60,7 +60,12 @@
                     <td>{{ $item->siswa->nis }}</td>
                     <td>{{ $item->siswa->nama_lengkap }}</td>
                     <td>{{ $item->kelas->nama_kelas }}</td>
-                    <td class="text-center" style="font-weight: bold;">
+                    <td class="text-center" style="font-weight: bold;
+                        @if($item->status == 'hadir') color: #15803d; background: #f0fdf4;
+                        @elseif($item->status == 'izin') color: #1d4ed8; background: #eff6ff;
+                        @elseif($item->status == 'sakit') color: #b45309; background: #fffbeb;
+                        @else color: #b91c1c; background: #fef2f2;
+                        @endif">
                         {{ strtoupper($item->status) }}
                     </td>
                     <td>{{ $item->catatan ?? '-' }}</td>

@@ -176,17 +176,17 @@
 
             <!-- Mini Pills Breakdown -->
             <div class="mt-5 grid grid-cols-3 gap-2 pt-1 text-center">
-                <div class="p-2 rounded-xl bg-purple-50/70 border border-purple-100">
-                    <span class="block text-[10px] font-bold text-purple-600 uppercase">Izin</span>
-                    <span class="text-sm font-extrabold text-purple-900">{{ $izinHariIni }}</span>
+                <div class="p-2 rounded-xl bg-blue-50/70 border border-blue-100">
+                    <span class="block text-[10px] font-bold text-blue-700 uppercase">Izin</span>
+                    <span class="text-sm font-extrabold text-blue-950">{{ $izinHariIni }}</span>
                 </div>
                 <div class="p-2 rounded-xl bg-amber-50/70 border border-amber-100">
-                    <span class="block text-[10px] font-bold text-amber-600 uppercase">Sakit</span>
-                    <span class="text-sm font-extrabold text-amber-900">{{ $sakitHariIni }}</span>
+                    <span class="block text-[10px] font-bold text-amber-700 uppercase">Sakit</span>
+                    <span class="text-sm font-extrabold text-amber-950">{{ $sakitHariIni }}</span>
                 </div>
                 <div class="p-2 rounded-xl bg-rose-50/70 border border-rose-100">
-                    <span class="block text-[10px] font-bold text-rose-600 uppercase">Alpa</span>
-                    <span class="text-sm font-extrabold text-rose-900">{{ $alpaHariIni }}</span>
+                    <span class="block text-[10px] font-bold text-rose-700 uppercase">Alpa</span>
+                    <span class="text-sm font-extrabold text-rose-950">{{ $alpaHariIni }}</span>
                 </div>
             </div>
         </div>
@@ -423,9 +423,9 @@
                                     </td>
                                     <td class="py-3 px-2 text-center text-[11px] font-semibold text-slate-600">
                                         <span class="text-emerald-700 font-bold">{{ $item['hadir'] }}</span> /
-                                        <span class="text-purple-600">{{ $item['izin'] }}</span> /
-                                        <span class="text-amber-600">{{ $item['sakit'] }}</span> /
-                                        <span class="text-rose-600 font-bold">{{ $item['alpa'] }}</span>
+                                        <span class="text-blue-700 font-bold">{{ $item['izin'] }}</span> /
+                                        <span class="text-amber-700 font-bold">{{ $item['sakit'] }}</span> /
+                                        <span class="text-rose-700 font-bold">{{ $item['alpa'] }}</span>
                                     </td>
                                     <td class="py-3 px-3 text-center">
                                         <span class="font-extrabold text-slate-800 text-xs">{{ $item['persen'] }}%</span>

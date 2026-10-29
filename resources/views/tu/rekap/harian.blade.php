@@ -41,55 +41,55 @@
 
     <!-- Summary Numbers Matching Screenshot Style -->
     <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        <div class="custom-card p-4 flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <div class="oripio-card p-4 flex items-center space-x-3.5 border-l-4 border-l-slate-400">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
                 #
             </div>
             <div>
-                <span class="block text-[11px] font-bold text-slate-400 uppercase">Tercatat</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight">Tercatat</span>
                 <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalSiswaTercatat }}</p>
             </div>
         </div>
-        <div class="custom-card p-4 flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <div class="oripio-card p-4 flex items-center space-x-3.5 border-l-4 border-l-emerald-500">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-extrabold text-sm flex-shrink-0 shadow-2xs">
                 H
             </div>
             <div>
-                <span class="block text-[11px] font-bold text-slate-400 uppercase">Hadir</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalHadir }}</p>
+                <span class="block text-[11px] font-bold text-emerald-800 uppercase tracking-tight">Hadir</span>
+                <p class="text-xl font-extrabold text-emerald-950 leading-tight mt-0.5">{{ $totalHadir }}</p>
             </div>
         </div>
-        <div class="custom-card p-4 flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <div class="oripio-card p-4 flex items-center space-x-3.5 border-l-4 border-l-blue-500">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center font-extrabold text-sm flex-shrink-0 shadow-2xs">
                 I
             </div>
             <div>
-                <span class="block text-[11px] font-bold text-slate-400 uppercase">Izin</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalIzin }}</p>
+                <span class="block text-[11px] font-bold text-blue-800 uppercase tracking-tight">Izin</span>
+                <p class="text-xl font-extrabold text-blue-950 leading-tight mt-0.5">{{ $totalIzin }}</p>
             </div>
         </div>
-        <div class="custom-card p-4 flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <div class="oripio-card p-4 flex items-center space-x-3.5 border-l-4 border-l-amber-500">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center font-extrabold text-sm flex-shrink-0 shadow-2xs">
                 S
             </div>
             <div>
-                <span class="block text-[11px] font-bold text-slate-400 uppercase">Sakit</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalSakit }}</p>
+                <span class="block text-[11px] font-bold text-amber-800 uppercase tracking-tight">Sakit</span>
+                <p class="text-xl font-extrabold text-amber-950 leading-tight mt-0.5">{{ $totalSakit }}</p>
             </div>
         </div>
-        <div class="custom-card p-4 flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <div class="oripio-card p-4 flex items-center space-x-3.5 border-l-4 border-l-rose-500">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center font-extrabold text-sm flex-shrink-0 shadow-2xs">
                 A
             </div>
             <div>
-                <span class="block text-[11px] font-bold text-slate-400 uppercase">Alpa</span>
-                <p class="text-xl font-extrabold text-slate-900 leading-tight mt-0.5">{{ $totalAlpa }}</p>
+                <span class="block text-[11px] font-bold text-rose-800 uppercase tracking-tight">Alpa</span>
+                <p class="text-xl font-extrabold text-rose-950 leading-tight mt-0.5">{{ $totalAlpa }}</p>
             </div>
         </div>
     </div>
 
     <!-- Table of Records -->
-    <div class="custom-card overflow-hidden">
+    <div class="oripio-card overflow-hidden">
         <div class="p-4 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between text-xs">
             <span class="font-bold text-slate-800">Tanggal: {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}</span>
             <span class="text-slate-400 font-medium">{{ $selectedKelas ? 'Kelas ' . $selectedKelas->nama_kelas : 'Semua Rombel' }}</span>
@@ -117,13 +117,21 @@
                             <td class="py-3 px-5 text-slate-600 font-medium">{{ $abs->kelas->nama_kelas }}</td>
                             <td class="py-3 px-5 text-center">
                                 @if($abs->status == 'hadir')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">Hadir</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        ● Hadir
+                                    </span>
                                 @elseif($abs->status == 'izin')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-50 text-purple-700 border border-purple-200">Izin</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
+                                        ● Izin
+                                    </span>
                                 @elseif($abs->status == 'sakit')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200">Sakit</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200">
+                                        ● Sakit
+                                    </span>
                                 @else
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">Alpa</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">
+                                        ● Alpa
+                                    </span>
                                 @endif
                             </td>
                             <td class="py-3 px-5 text-slate-500 italic">{{ $abs->catatan ?? '-' }}</td>

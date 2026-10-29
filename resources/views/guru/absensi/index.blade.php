@@ -120,7 +120,7 @@
                                 <label class="cursor-pointer">
                                     <input type="radio" name="absensi[{{ $siswa->id }}][status]" value="izin"
                                         class="peer sr-only status-izin" {{ $currentStatus == 'izin' ? 'checked' : '' }}>
-                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-purple-600 peer-checked:text-white peer-checked:border-purple-600 hover:bg-slate-50 transition shadow-2xs">
+                                    <div class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 hover:bg-slate-50 transition shadow-2xs">
                                         Izin
                                     </div>
                                 </label>

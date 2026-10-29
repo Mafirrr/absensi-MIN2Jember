@@ -65,11 +65,11 @@
                             $isW = $row['daily'][$date->day]['is_weekend'];
                         @endphp
                         <td class="{{ $isW ? 'weekend' : '' }}">
-                            @if($st === 'hadir') H
-                            @elseif($st === 'izin') I
-                            @elseif($st === 'sakit') S
-                            @elseif($st === 'alpa') A
-                            @else -
+                            @if($st === 'hadir') <span style="color: #15803d; font-weight: bold;">H</span>
+                            @elseif($st === 'izin') <span style="color: #1d4ed8; font-weight: bold;">I</span>
+                            @elseif($st === 'sakit') <span style="color: #b45309; font-weight: bold;">S</span>
+                            @elseif($st === 'alpa') <span style="color: #b91c1c; font-weight: bold;">A</span>
+                            @else <span style="color: #cbd5e1;">-</span>
                             @endif
                         </td>
                     @endforeach
