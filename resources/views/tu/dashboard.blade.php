@@ -193,227 +193,227 @@
 
     </div>
 
-    <!-- Middle Section: Left Widgets (40%) & Right Widgets (60%) Matching Screenshot -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-        <!-- LEFT COLUMN (5 of 12 cols): My Wallet & My Savings Plan Style -->
-        <div class="lg:col-span-5 space-y-5">
-
-            <!-- Widget 1: My Wallet Style -> Daftar Rombel Kelas -->
-            <div class="oripio-card p-5">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                    <h3 class="text-xs font-bold text-slate-900 tracking-tight">Rombel Kelas Binaan</h3>
-                    <a href="{{ route('tu.kelas.index') }}" class="text-[11px] font-bold text-emerald-600 hover:text-emerald-700">
-                        + Kelola Kelas
-                    </a>
-                </div>
-
-                <!-- 2x2 Mini Cards Grid Matching Screenshot Currencies -->
-                <div class="grid grid-cols-2 gap-3 mt-4">
-                    @forelse($kelasList->take(4) as $k)
-                        <div class="p-3 rounded-2xl border border-slate-150 bg-slate-50/50 hover:bg-white hover:shadow-xs transition">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center space-x-2">
-                                    <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-[10px] font-extrabold flex items-center justify-center">
-                                        {{ substr($k['nama_kelas'], 0, 1) }}
-                                    </span>
-                                    <span class="text-xs font-bold text-slate-800">{{ $k['nama_kelas'] }}</span>
-                                </div>
-                                <span class="text-slate-300 text-xs">&vellip;</span>
-                            </div>
-
-                            <div class="text-sm font-extrabold text-slate-900">
-                                {{ $k['total_siswa'] }} Siswa
-                            </div>
-                            <div class="mt-1 flex items-center justify-between text-[10px]">
-                                <span class="text-slate-400 truncate max-w-[80px]">{{ $k['wali_kelas'] }}</span>
-                                <span class="font-bold {{ $k['sudah_input'] ? 'text-emerald-600' : 'text-slate-400' }}">
-                                    ● {{ $k['sudah_input'] ? 'Diisi (' . $k['persen'] . '%)' : 'Belum' }}
-                                </span>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-span-2 py-4 text-center text-xs text-slate-400">
-                            Belum ada data rombel kelas.
-                        </div>
-                    @endforelse
+    <!-- 1 COLUMN FULL-WIDTH: Overview Kehadiran Sekolah (Grafik Melebar ke Samping) -->
+    <div class="oripio-card p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100/80 gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-2.5 h-4 bg-emerald-600 rounded-xs"></div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900 tracking-tight">Overview Kehadiran Sekolah</h3>
+                    <p class="text-[11px] text-slate-400 font-medium">Tren grafik kehadiran harian siswa untuk periode {{ $periodeLabel }}</p>
                 </div>
             </div>
 
-            <!-- Widget 2: My Savings Plan Style -> Statistik Kehadiran per Status -->
-            <div class="oripio-card p-5">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-slate-400">🎯</span>
-                        <h3 class="text-xs font-bold text-slate-900 tracking-tight">Statistik Status Kehadiran</h3>
-                    </div>
-                    <button class="text-slate-400 hover:text-slate-600">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <circle cx="10" cy="4" r="1.5" />
-                            <circle cx="10" cy="10" r="1.5" />
-                            <circle cx="10" cy="16" r="1.5" />
-                        </svg>
-                    </button>
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    <span class="text-xs">Kehadiran</span>
                 </div>
 
-                <div class="mt-4 space-y-4">
-                    <!-- Item 1: Tingkat Kehadiran (Hadir) -->
-                    <div>
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                                <span class="font-bold text-slate-800">Tingkat Hadir</span>
-                            </div>
-                            <span class="font-extrabold text-emerald-700">{{ $persenKehadiran }}%</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
-                            <span>{{ $hadirHariIni }} dari {{ $totalSiswa }} siswa hadir</span>
-                            <span>Target 95%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-emerald-600 h-2 rounded-full" style="width: {{ min(100, $persenKehadiran) }}%"></div>
-                        </div>
+                <!-- Interactive Filter Periode Dropdown -->
+                <form method="GET" action="{{ route('tu.dashboard') }}" class="inline-flex items-center">
+                    <div class="relative">
+                        <select name="periode" onchange="this.form.submit()"
+                                class="appearance-none text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 pl-3 pr-7 py-1.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer transition shadow-2xs">
+                            <option value="7" {{ $periode == '7' ? 'selected' : '' }}>7 Hari Terakhir</option>
+                            <option value="14" {{ $periode == '14' ? 'selected' : '' }}>14 Hari Terakhir</option>
+                            <option value="30" {{ $periode == '30' ? 'selected' : '' }}>30 Hari Terakhir</option>
+                            <option value="bulan_ini" {{ $periode == 'bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
+                        </select>
+                        <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 text-[8px]">
+                            ▼
+                        </span>
                     </div>
+                </form>
 
-                    <!-- Item 2: Izin & Sakit -->
-                    @php
-                        $persenIzinSakit = $totalSiswa > 0 ? round((($izinHariIni + $sakitHariIni) / $totalSiswa) * 100, 1) : 0;
-                    @endphp
-                    <div>
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                <span class="font-bold text-slate-800">Izin & Sakit</span>
-                            </div>
-                            <span class="font-extrabold text-amber-600">{{ $persenIzinSakit }}%</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
-                            <span>{{ $izinHariIni + $sakitHariIni }} siswa terkonfirmasi</span>
-                            <span>Maks 5%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-amber-400 h-2 rounded-full" style="width: {{ min(100, $persenIzinSakit) }}%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3: Alpa -->
-                    @php
-                        $persenAlpa = $totalSiswa > 0 ? round(($alpaHariIni / $totalSiswa) * 100, 1) : 0;
-                    @endphp
-                    <div>
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                                <span class="font-bold text-slate-800">Alpa / Tanpa Keterangan</span>
-                            </div>
-                            <span class="font-extrabold text-rose-600">{{ $persenAlpa }}%</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
-                            <span>{{ $alpaHariIni }} siswa belum konfirmasi</span>
-                            <span>Target 0%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-rose-500 h-2 rounded-full" style="width: {{ min(100, $persenAlpa) }}%"></div>
-                        </div>
-                    </div>
-                </div>
+                <button type="button" onclick="alert('Overview statistik kehadiran berdasarkan catatan presensi pada rentang periode yang dipilih.')"
+                        class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg" title="Info Grafik">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <circle cx="10" cy="4" r="1.5" />
+                        <circle cx="10" cy="10" r="1.5" />
+                        <circle cx="10" cy="16" r="1.5" />
+                    </svg>
+                </button>
             </div>
-
         </div>
 
-        <!-- RIGHT COLUMN (7 of 12 cols): Overview Kehadiran -->
-        <div class="lg:col-span-7">
-            <div class="oripio-card p-5 h-full flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-2 h-3.5 bg-emerald-600 rounded-xs"></div>
-                            <h3 class="text-xs font-bold text-slate-900 tracking-tight">Overview Kehadiran Sekolah</h3>
+        <!-- Custom Bar Chart Container - Melebar ke Samping Sepenuhnya -->
+        <div class="pt-8 pb-4">
+            <div class="h-60 flex items-end justify-between gap-1 sm:gap-2 lg:gap-3 px-1 sm:px-3 overflow-x-auto">
+                @php
+                    $maxHadir = max(1, ...$trendHadir);
+                    $totalBars = count($dates);
+                @endphp
+                @foreach($dates as $idx => $dateLabel)
+                    @php
+                        $val = $trendHadir[$idx] ?? 0;
+                        $heightPct = round(($val / $maxHadir) * 85);
+                        $isToday = $idx === ($totalBars - 1);
+                    @endphp
+                    <div class="flex-1 min-w-[14px] sm:min-w-[20px] max-w-[48px] flex flex-col items-center group relative h-full justify-end">
+                        @if($isToday)
+                            <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
+                            </div>
+                        @else
+                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute -top-7 mb-1 z-20 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none">
+                                <span>{{ $val }} Hadir</span>
+                            </div>
+                        @endif
+
+                        <div class="w-full rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
+                             style="height: {{ max(12, $heightPct) }}%">
                         </div>
 
-                        <div class="flex items-center space-x-3">
-                            <div class="flex items-center space-x-1.5 text-xs font-semibold text-slate-600">
-                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                                <span class="text-[11px]">Kehadiran</span>
+                        <span class="text-[9px] sm:text-[10px] lg:text-[11px] font-bold mt-2.5 text-center leading-tight {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
+                            @if(count($dates) > 14)
+                                <span class="hidden md:inline">{{ $dateLabel }}</span>
+                                <span class="md:hidden">{{ substr($dateLabel, 0, 2) }}</span>
+                            @else
+                                {{ $dateLabel }}
+                            @endif
+                        </span>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Bottom Bar Info Tiles -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100/80 text-center">
+            <div class="p-3 rounded-xl bg-slate-50/80">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Presensi ({{ $periodeLabel }})</span>
+                <span class="text-base font-extrabold text-slate-800">{{ array_sum($trendHadir) }} Siswa</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50/80">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">Rata-rata Presensi</span>
+                <span class="text-base font-extrabold text-emerald-700">{{ count($trendHadir) > 0 ? round(array_sum($trendHadir) / count($trendHadir), 1) : 0 }} / Hari</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50/80">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">Status Konsistensi</span>
+                <span class="text-base font-extrabold text-emerald-600">● Optimal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 COLUMNS: Rombel Kelas Binaan (Kiri) & Statistik Status Kehadiran (Kanan) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        <!-- Widget 1: Rombel Kelas Binaan -->
+        <div class="oripio-card p-6">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                <h3 class="text-xs font-bold text-slate-900 tracking-tight">Rombel Kelas Binaan</h3>
+                <a href="{{ route('tu.kelas.index') }}" class="text-[11px] font-bold text-emerald-600 hover:text-emerald-700">
+                    + Kelola Kelas
+                </a>
+            </div>
+
+            <!-- 2x2 Mini Cards Grid -->
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                @forelse($kelasList->take(4) as $k)
+                    <div class="p-3.5 rounded-2xl border border-slate-150 bg-slate-50/50 hover:bg-white hover:shadow-xs transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-[10px] font-extrabold flex items-center justify-center">
+                                    {{ substr($k['nama_kelas'], 0, 1) }}
+                                </span>
+                                <span class="text-xs font-bold text-slate-800">{{ $k['nama_kelas'] }}</span>
                             </div>
+                            <span class="text-slate-300 text-xs">&vellip;</span>
+                        </div>
 
-                            <!-- Interactive Filter Periode Dropdown -->
-                            <form method="GET" action="{{ route('tu.dashboard') }}" class="inline-flex items-center">
-                                <div class="relative">
-                                    <select name="periode" onchange="this.form.submit()"
-                                            class="appearance-none text-[11px] font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 pl-2.5 pr-6 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer transition shadow-2xs">
-                                        <option value="7" {{ $periode == '7' ? 'selected' : '' }}>7 Hari Terakhir</option>
-                                        <option value="14" {{ $periode == '14' ? 'selected' : '' }}>14 Hari Terakhir</option>
-                                        <option value="30" {{ $periode == '30' ? 'selected' : '' }}>30 Hari Terakhir</option>
-                                        <option value="bulan_ini" {{ $periode == 'bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
-                                    </select>
-                                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400 text-[8px]">
-                                        ▼
-                                    </span>
-                                </div>
-                            </form>
-
-                            <button type="button" onclick="alert('Overview statistik kehadiran berdasarkan catatan presensi pada rentang periode yang dipilih.')"
-                                    class="text-slate-400 hover:text-slate-600 p-1 rounded-lg" title="Info Grafik">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <circle cx="10" cy="4" r="1.5" />
-                                    <circle cx="10" cy="10" r="1.5" />
-                                    <circle cx="10" cy="16" r="1.5" />
-                                </svg>
-                            </button>
+                        <div class="text-sm font-extrabold text-slate-900">
+                            {{ $k['total_siswa'] }} Siswa
+                        </div>
+                        <div class="mt-1 flex items-center justify-between text-[10px]">
+                            <span class="text-slate-400 truncate max-w-[80px]">{{ $k['wali_kelas'] }}</span>
+                            <span class="font-bold {{ $k['sudah_input'] ? 'text-emerald-600' : 'text-slate-400' }}">
+                                ● {{ $k['sudah_input'] ? 'Diisi (' . $k['persen'] . '%)' : 'Belum' }}
+                            </span>
                         </div>
                     </div>
+                @empty
+                    <div class="col-span-2 py-4 text-center text-xs text-slate-400">
+                        Belum ada data rombel kelas.
+                    </div>
+                @endforelse
+            </div>
+        </div>
 
-                    <!-- Custom Bar Chart Container matching screenshot's rounded pastel pillars with dark active bar -->
-                    <div class="pt-8 pb-4">
-                        <div class="h-56 flex items-end justify-between gap-1.5 sm:gap-2.5 px-2 overflow-x-auto">
-                            @php
-                                $maxHadir = max(1, ...$trendHadir);
-                            @endphp
-                            @foreach($dates as $idx => $dateLabel)
-                                @php
-                                    $val = $trendHadir[$idx] ?? 0;
-                                    $heightPct = round(($val / $maxHadir) * 85);
-                                    $isToday = $idx === (count($dates) - 1);
-                                @endphp
-                                <div class="flex-1 min-w-[20px] max-w-[42px] flex flex-col items-center group relative h-full justify-end">
-                                    @if($isToday)
-                                        <div class="absolute -top-7 mb-1 z-10 bg-slate-900 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs flex items-center space-x-1 whitespace-nowrap">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                            <span>{{ $val }} Hadir ({{ $persenKehadiran }}%)</span>
-                                        </div>
-                                    @else
-                                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute -top-7 mb-1 z-20 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none">
-                                            <span>{{ $val }} Hadir</span>
-                                        </div>
-                                    @endif
+        <!-- Widget 2: Statistik Status Kehadiran -->
+        <div class="oripio-card p-6">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100/80">
+                <div class="flex items-center space-x-2">
+                    <span class="text-slate-400">🎯</span>
+                    <h3 class="text-xs font-bold text-slate-900 tracking-tight">Statistik Status Kehadiran</h3>
+                </div>
+                <button class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <circle cx="10" cy="4" r="1.5" />
+                        <circle cx="10" cy="10" r="1.5" />
+                        <circle cx="10" cy="16" r="1.5" />
+                    </svg>
+                </button>
+            </div>
 
-                                    <div class="w-full rounded-t-xl transition-all duration-300 {{ $isToday ? 'bg-emerald-600 shadow-sm' : 'bg-[#D1F0DE] hover:bg-emerald-200' }}"
-                                         style="height: {{ max(14, $heightPct) }}%">
-                                    </div>
-
-                                    <span class="text-[10px] sm:text-[11px] font-bold mt-2.5 truncate {{ $isToday ? 'text-emerald-700' : 'text-slate-400' }}">
-                                        {{ $dateLabel }}
-                                    </span>
-                                </div>
-                            @endforeach
+            <div class="mt-4 space-y-4">
+                <!-- Item 1: Tingkat Kehadiran (Hadir) -->
+                <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            <span class="font-bold text-slate-800">Tingkat Hadir</span>
                         </div>
+                        <span class="font-extrabold text-emerald-700">{{ $persenKehadiran }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                        <span>{{ $hadirHariIni }} dari {{ $totalSiswa }} siswa hadir</span>
+                        <span>Target 95%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div class="bg-emerald-600 h-2 rounded-full" style="width: {{ min(100, $persenKehadiran) }}%"></div>
                     </div>
                 </div>
 
-                <!-- Bottom Bar Info Tiles -->
-                <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100/80 text-center">
-                    <div class="p-2.5 rounded-xl bg-slate-50/80">
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Total Presensi ({{ $periodeLabel }})</span>
-                        <span class="text-sm font-extrabold text-slate-800">{{ array_sum($trendHadir) }} Siswa</span>
+                <!-- Item 2: Izin & Sakit -->
+                @php
+                    $persenIzinSakit = $totalSiswa > 0 ? round((($izinHariIni + $sakitHariIni) / $totalSiswa) * 100, 1) : 0;
+                @endphp
+                <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <span class="font-bold text-slate-800">Izin & Sakit</span>
+                        </div>
+                        <span class="font-extrabold text-amber-600">{{ $persenIzinSakit }}%</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50/80">
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Rata-rata Presensi</span>
-                        <span class="text-sm font-extrabold text-emerald-700">{{ count($trendHadir) > 0 ? round(array_sum($trendHadir) / count($trendHadir), 1) : 0 }} / Hari</span>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                        <span>{{ $izinHariIni + $sakitHariIni }} siswa terkonfirmasi</span>
+                        <span>Maks 5%</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50/80">
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Status Konsistensi</span>
-                        <span class="text-sm font-extrabold text-emerald-600">● Optimal</span>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div class="bg-amber-400 h-2 rounded-full" style="width: {{ min(100, $persenIzinSakit) }}%"></div>
+                    </div>
+                </div>
+
+                <!-- Item 3: Alpa -->
+                @php
+                    $persenAlpa = $totalSiswa > 0 ? round(($alpaHariIni / $totalSiswa) * 100, 1) : 0;
+                @endphp
+                <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                            <span class="font-bold text-slate-800">Alpa / Tanpa Keterangan</span>
+                        </div>
+                        <span class="font-extrabold text-rose-600">{{ $persenAlpa }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 font-medium">
+                        <span>{{ $alpaHariIni }} siswa belum konfirmasi</span>
+                        <span>Target 0%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div class="bg-rose-500 h-2 rounded-full" style="width: {{ min(100, $persenAlpa) }}%"></div>
                     </div>
                 </div>
             </div>
