@@ -255,20 +255,30 @@
 
             <!-- Top Header Navbar Matching Screenshot -->
             <header class="px-6 lg:px-8 py-4 bg-white border-b border-slate-100 flex items-center justify-between gap-4 sticky top-0 z-20">
-                <!-- Search Bar (Oripio search pill style) -->
-                <div class="flex-1 max-w-md">
-                    <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </span>
-                        <input type="text" name="search" placeholder="Search..."
-                               class="w-full pl-9 pr-14 py-2 bg-slate-50 border border-slate-200/80 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
-                        <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[10px] font-bold text-slate-400">
-                            ⌘ K
-                        </span>
-                    </form>
+                <!-- Search Bar & Realtime Date Pill (Sebelah Search) -->
+                <div class="flex items-center space-x-3 flex-1 max-w-xl">
+                    <div class="flex-1 max-w-md">
+                        <form method="GET" action="{{ auth()->user()->isTU() ? route('tu.siswa.index') : route('guru.dashboard') }}" class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input type="text" name="search" placeholder="Search..."
+                                   class="w-full pl-9 pr-14 py-2 bg-slate-50 border border-slate-200/80 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[10px] font-bold text-slate-400">
+                                ⌘ K
+                            </span>
+                        </form>
+                    </div>
+
+                    <!-- Date Pill Badge -->
+                    <div class="hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-2xs text-xs font-semibold text-slate-600 whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ now()->translatedFormat('l, d F Y') }}</span>
+                    </div>
                 </div>
 
                 <!-- User Profile (Tanpa Card / Icon Bulat) -->
