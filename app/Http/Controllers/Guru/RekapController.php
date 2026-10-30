@@ -121,21 +121,6 @@ class RekapController extends Controller
             }
         }
 
-        // Print mode
-        if ($request->query('print') == '1') {
-            return view('guru.rekap.bulanan-print', compact(
-                'bulan',
-                'tahun',
-                'selectedKelas',
-                'monthDates',
-                'matrix',
-                'totalHadirBulan',
-                'totalIzinBulan',
-                'totalSakitBulan',
-                'totalAlpaBulan'
-            ));
-        }
-
         return view('guru.rekap.bulanan', compact(
             'bulan',
             'tahun',

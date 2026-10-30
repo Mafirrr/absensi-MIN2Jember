@@ -235,9 +235,6 @@ class AbsensiSystemTest extends TestCase
         $resHarianFilter = $this->get(route('tu.rekap.harian', ['kelas_id' => $this->kelas1->id]));
         $resHarianFilter->assertStatus(200);
 
-        $resHarianPrint = $this->get(route('tu.rekap.harian', ['kelas_id' => $this->kelas1->id, 'print' => 1]));
-        $resHarianPrint->assertStatus(200);
-
         $resBulanan = $this->get(route('tu.rekap.bulanan', ['kelas_id' => $this->kelas1->id]));
         $resBulanan->assertStatus(200);
     }

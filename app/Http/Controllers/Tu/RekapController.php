@@ -42,21 +42,6 @@ class RekapController extends Controller
 
         $selectedKelas = $kelasId ? Kelas::find($kelasId) : null;
 
-        // Print view
-        if ($request->query('print') == '1') {
-            return view('tu.rekap.harian-print', compact(
-                'tanggal',
-                'kelasId',
-                'selectedKelas',
-                'absensiList',
-                'totalHadir',
-                'totalIzin',
-                'totalSakit',
-                'totalAlpa',
-                'totalSiswaTercatat'
-            ));
-        }
-
         return view('tu.rekap.harian', compact(
             'tanggal',
             'kelasId',
@@ -154,20 +139,6 @@ class RekapController extends Controller
                     'persen' => $persentase,
                 ];
             }
-        }
-
-        if ($request->query('print') == '1') {
-            return view('tu.rekap.bulanan-print', compact(
-                'bulan',
-                'tahun',
-                'selectedKelas',
-                'monthDates',
-                'matrix',
-                'totalHadirBulan',
-                'totalIzinBulan',
-                'totalSakitBulan',
-                'totalAlpaBulan'
-            ));
         }
 
         return view('tu.rekap.bulanan', compact(
