@@ -18,14 +18,6 @@
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Rekap Presensi Bulanan</h2>
                 <p class="text-xs text-slate-400 font-medium mt-1">Rekapitulasi catatan presensi bulanan siswa <strong>Kelas {{ $selectedKelas->nama_kelas }}</strong>.</p>
             </div>
-            <div class="flex items-center space-x-3">
-                <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-2xs text-xs font-semibold text-slate-600">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>{{ \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->translatedFormat('F Y') }}</span>
-                </div>
-            </div>
         </div>
 
         <!-- Filter Bar -->
