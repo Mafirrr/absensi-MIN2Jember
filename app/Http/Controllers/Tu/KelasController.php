@@ -77,6 +77,13 @@ class KelasController extends Controller
             return back()->with('error', "Kelas {$nama} tidak dapat dihapus karena masih memiliki {$kela->siswa()->count()} siswa.");
         }
 
+        if ($kela->absensi()->count() > 0) {
+            return back()->with('error', "Kelas {$nama} tidak dapat dihapus karena masih memiliki riwayat data absensi.");
+        }
+
+        // Lepas guru pengampu pivot
+        $kela->guruPengampu()->detach();
+
         $kela->delete();
 
         return redirect()->route('tu.kelas.index')->with('success', "Kelas {$nama} berhasil dihapus.");

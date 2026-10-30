@@ -84,8 +84,11 @@ class AbsensiController extends Controller
 
         DB::transaction(function () use ($validated, $kelasId, $tanggal, $user) {
             foreach ($validated['absensi'] as $siswaId => $data) {
-                // Ensure student belongs to this class
-                $siswa = Siswa::where('id', $siswaId)->where('kelas_id', $kelasId)->first();
+                // Ensure student belongs to this class and is active
+                $siswa = Siswa::where('id', $siswaId)
+                    ->where('kelas_id', $kelasId)
+                    ->where('status', 'aktif')
+                    ->first();
                 if (!$siswa) {
                     continue;
                 }

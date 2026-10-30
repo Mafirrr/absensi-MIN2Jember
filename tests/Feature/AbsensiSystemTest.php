@@ -241,5 +241,31 @@ class AbsensiSystemTest extends TestCase
         $resBulanan = $this->get(route('tu.rekap.bulanan', ['kelas_id' => $this->kelas1->id]));
         $resBulanan->assertStatus(200);
     }
+
+    public function test_student_with_attendance_history_cannot_be_deleted(): void
+    {
+        $this->actingAs($this->tuUser);
+
+        // Record attendance for siswa1
+        Absensi::create([
+            'siswa_id' => $this->siswa1->id,
+            'kelas_id' => $this->kelas1->id,
+            'tanggal' => Carbon::today()->format('Y-m-d'),
+            'status' => 'hadir',
+        ]);
+
+        $resDelete = $this->delete(route('tu.siswa.destroy', $this->siswa1->id));
+        $resDelete->assertSessionHas('error');
+        $this->assertDatabaseHas('siswa', ['id' => $this->siswa1->id]);
+    }
+
+    public function test_tu_cannot_delete_own_account(): void
+    {
+        $this->actingAs($this->tuUser);
+
+        $resDelete = $this->delete(route('tu.guru.destroy', $this->tuUser->id));
+        $resDelete->assertSessionHas('error');
+        $this->assertDatabaseHas('users', ['id' => $this->tuUser->id]);
+    }
 }
 

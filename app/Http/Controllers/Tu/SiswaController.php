@@ -86,6 +86,12 @@ class SiswaController extends Controller
     public function destroy(Siswa $siswa)
     {
         $nama = $siswa->nama_lengkap;
+        $totalAbsensi = $siswa->absensi()->count();
+
+        if ($totalAbsensi > 0) {
+            return back()->with('error', "Siswa {$nama} tidak dapat dihapus karena sudah memiliki {$totalAbsensi} riwayat presensi. Silakan ubah status siswa menjadi 'nonaktif', 'pindah', atau 'lulus' pada tombol Edit.");
+        }
+
         $siswa->delete();
 
         return back()->with('success', "Siswa {$nama} berhasil dihapus.");

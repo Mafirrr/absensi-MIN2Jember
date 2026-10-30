@@ -73,10 +73,25 @@ class GuruController extends Controller
 
     public function destroy(User $guru)
     {
+        if ($guru->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        if ($guru->role !== 'guru') {
+            return back()->with('error', 'Hanya akun dengan peran guru yang dapat dihapus.');
+        }
+
         $name = $guru->name;
 
-        // Reset wali kelas if assigned
+        // Reset wali kelas jika terdaftar
         Kelas::where('wali_kelas_id', $guru->id)->update(['wali_kelas_id' => null]);
+
+        // Lepas relasi kelas ajar (pivot)
+        $guru->kelasAjar()->detach();
+
+        // Null-kan guru_id pada absensi yang pernah diinput agar data absensi tetap utuh
+        \App\Models\Absensi::where('guru_id', $guru->id)->update(['guru_id' => null]);
+
         $guru->delete();
 
         return redirect()->route('tu.guru.index')->with('success', "Guru {$name} berhasil dihapus.");
