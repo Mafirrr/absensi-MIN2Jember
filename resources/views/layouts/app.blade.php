@@ -129,7 +129,6 @@
                                         </svg>
                                         <span>Rekap Harian</span>
                                     </div>
-                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-medium">Hari ini</span>
                                 </a>
 
                                 <a href="{{ route('tu.rekap.bulanan') }}"
@@ -141,7 +140,6 @@
                                         </svg>
                                         <span>Rekap Bulanan</span>
                                     </div>
-                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-medium">Bulan</span>
                                 </a>
                             @else
                                 <a href="{{ route('guru.dashboard') }}"
@@ -164,7 +162,6 @@
                                         </svg>
                                         <span>Input Absensi</span>
                                     </div>
-                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold">Input</span>
                                 </a>
 
                                 <a href="{{ route('guru.rekap.bulanan') }}"
@@ -195,7 +192,6 @@
                                         </svg>
                                         <span>Kelola Kelas</span>
                                     </div>
-                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\Kelas::count() }}</span>
                                 </a>
 
                                 <a href="{{ route('tu.siswa.index') }}"
@@ -207,7 +203,6 @@
                                         </svg>
                                         <span>Kelola Siswa</span>
                                     </div>
-                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\Siswa::count() }}</span>
                                 </a>
 
                                 <a href="{{ route('tu.guru.index') }}"
@@ -219,7 +214,6 @@
                                         </svg>
                                         <span>Kelola Guru</span>
                                     </div>
-                                    <span class="text-[10px] font-bold text-slate-400">{{ \App\Models\User::where('role', 'guru')->count() }}</span>
                                 </a>
                             </nav>
                         </div>
