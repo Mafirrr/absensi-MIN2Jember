@@ -255,12 +255,9 @@
 
             <!-- Top Header Navbar: Tanggal (Kiri), Search (Tengah), Profil (Kanan) -->
             <header class="px-6 lg:px-8 py-4 bg-white border-b border-slate-100 flex items-center justify-between gap-4 sticky top-0 z-20">
-                <!-- Kiri: Realtime Hari & Tanggal (Tanpa Border) -->
-                <div class="flex items-center space-x-2 text-xs font-bold text-slate-700 whitespace-nowrap flex-shrink-0">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>{{ now()->translatedFormat('l, d F Y') }}</span>
+                <!-- Kiri: Realtime Hari & Tanggal (Tanpa Border & Tanpa Ikon) -->
+                <div class="text-xs font-bold text-slate-700 whitespace-nowrap flex-shrink-0">
+                    {{ now()->translatedFormat('l, d F Y') }}
                 </div>
 
                 <!-- Tengah: Search Bar -->
