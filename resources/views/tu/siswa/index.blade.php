@@ -6,6 +6,14 @@
 @section('content')
 <div class="space-y-6">
 
+    <!-- Header / Title -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+        <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kelola Siswa</h2>
+            <p class="text-xs text-slate-400 font-medium mt-1">Data induk siswa terdaftar, NIS, rombel penempatan, dan status keaktifan.</p>
+        </div>
+    </div>
+
     <!-- Filters Bar -->
     <div class="custom-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <form method="GET" action="{{ route('tu.siswa.index') }}" class="flex flex-wrap items-center gap-2.5 flex-1">

@@ -6,10 +6,18 @@
 @section('content')
 <div class="space-y-6">
 
-    <div class="flex items-center space-x-2">
-        <a href="{{ route('tu.kelas.index') }}" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs">
-            &larr; Kembali ke Daftar Kelas
-        </a>
+    <!-- Header / Title -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+        <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Detail Rombel Kelas</h2>
+            <p class="text-xs text-slate-400 font-medium mt-1">Informasi rombongan belajar, wali kelas, dan daftar siswa terdaftar.</p>
+        </div>
+        <div>
+            <a href="{{ route('tu.kelas.index') }}" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs">
+                <span>&larr;</span>
+                <span>Kembali ke Kelola Kelas</span>
+            </a>
+        </div>
     </div>
 
     <!-- Info Box -->

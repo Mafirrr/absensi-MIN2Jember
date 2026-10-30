@@ -6,6 +6,14 @@
 @section('content')
 <div class="space-y-6">
 
+    <!-- Header / Title -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+        <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kelola Guru</h2>
+            <p class="text-xs text-slate-400 font-medium mt-1">Manajemen akun pendidik, nomor identitas guru (NIP), dan hak akses kelas.</p>
+        </div>
+    </div>
+
     <!-- Actions Bar -->
     <div class="custom-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <form method="GET" action="{{ route('tu.guru.index') }}" class="flex items-center space-x-2 w-full sm:w-80">
