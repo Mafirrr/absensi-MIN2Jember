@@ -326,9 +326,9 @@
                             {{ $k['total_siswa'] }} Siswa
                         </div>
                         <div class="mt-1 flex items-center justify-between text-[10px]">
-                            <span class="text-slate-400 truncate max-w-[80px]">{{ $k['wali_kelas'] }}</span>
-                            <span class="font-bold {{ $k['sudah_input'] ? 'text-emerald-600' : 'text-slate-400' }}">
-                                ● {{ $k['sudah_input'] ? 'Diisi (' . $k['persen'] . '%)' : 'Belum' }}
+                            <span class="text-slate-400 truncate max-w-[90px]" title="{{ $k['wali_kelas'] }}">{{ $k['wali_kelas'] }}</span>
+                            <span class="font-bold {{ $k['sudah_input'] ? 'text-emerald-600' : 'text-amber-600' }}" title="Status input absensi hari ini">
+                                {{ $k['sudah_input'] ? '● Diisi (' . $k['persen'] . '%)' : '○ Belum Diabsen' }}
                             </span>
                         </div>
                     </div>
