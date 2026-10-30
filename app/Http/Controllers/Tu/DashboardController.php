@@ -62,6 +62,9 @@ class DashboardController extends Controller
             ];
         });
 
+        $kelasSudahInput = $kelasList->where('sudah_input', true)->count();
+        $kelasBelumInput = $kelasList->where('sudah_input', false)->count();
+
         // Filter periode tren kehadiran
         $periode = $request->query('periode', $request->query('filter', '7'));
         $dates = [];
@@ -135,6 +138,8 @@ class DashboardController extends Controller
             'belumDiabsen',
             'persenKehadiran',
             'kelasList',
+            'kelasSudahInput',
+            'kelasBelumInput',
             'periode',
             'periodeLabel',
             'dates',
