@@ -264,5 +264,41 @@ class AbsensiSystemTest extends TestCase
         $resDelete->assertSessionHas('error');
         $this->assertDatabaseHas('users', ['id' => $this->tuUser->id]);
     }
+
+    public function test_tu_can_store_and_update_guru(): void
+    {
+        $this->actingAs($this->tuUser);
+
+        $response = $this->post(route('tu.guru.store'), [
+            'name' => 'Guru Testing',
+            'email' => 'gurutest@sekolah.sch.id',
+            'password' => 'password123',
+            'nip' => '',
+            'gender' => 'L',
+            'phone' => '081234567890',
+            'wali_kelas_id' => $this->kelas1->id,
+        ]);
+
+        $response->assertRedirect(route('tu.guru.index'));
+        $this->assertDatabaseHas('users', ['email' => 'gurutest@sekolah.sch.id']);
+
+        $guru = User::where('email', 'gurutest@sekolah.sch.id')->first();
+        $this->assertEquals($guru->id, $this->kelas1->fresh()->wali_kelas_id);
+
+        $updateResponse = $this->put(route('tu.guru.update', $guru->id), [
+            'name' => 'Guru Testing Updated',
+            'email' => 'gurutest_updated@sekolah.sch.id',
+            'nip' => '199501012020011001',
+            'gender' => 'P',
+            'phone' => '081234567899',
+            'password' => '',
+            'wali_kelas_id' => $this->kelas2->id,
+        ]);
+
+        $updateResponse->assertRedirect(route('tu.guru.index'));
+        $this->assertDatabaseHas('users', ['email' => 'gurutest_updated@sekolah.sch.id', 'gender' => 'P']);
+        $this->assertNull($this->kelas1->fresh()->wali_kelas_id);
+        $this->assertEquals($guru->id, $this->kelas2->fresh()->wali_kelas_id);
+    }
 }
 

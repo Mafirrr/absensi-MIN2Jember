@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Seed Users (TU & Guru)
         $tu = User::create([
-            'name' => 'Budi Santoso, S.Kom (Tata Usaha)',
+            'name' => 'Tata Usaha',
             'email' => 'tu@sekolah.sch.id',
             'password' => Hash::make('password123'),
             'role' => 'tu',

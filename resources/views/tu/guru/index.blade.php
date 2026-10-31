@@ -73,7 +73,18 @@
                             </td>
                             <td class="py-3.5 px-5 text-slate-500">{{ $guru->phone ?? '-' }}</td>
                             <td class="py-3.5 px-5 text-right space-x-3">
-                                <button type="button" onclick="editGuru({{ json_encode($guru) }})" class="text-amber-600 hover:text-amber-700 font-bold">Edit</button>
+                                <button type="button" 
+                                    data-guru="{{ json_encode([
+                                        'id' => $guru->id,
+                                        'name' => $guru->name,
+                                        'nip' => $guru->nip,
+                                        'gender' => $guru->gender,
+                                        'email' => $guru->email,
+                                        'phone' => $guru->phone,
+                                        'wali_kelas_id' => $guru->kelasWali->first()?->id ?? '',
+                                    ]) }}"
+                                    onclick="editGuru(JSON.parse(this.dataset.guru))" 
+                                    class="text-amber-600 hover:text-amber-700 font-bold">Edit</button>
                                 <form method="POST" action="{{ route('tu.guru.destroy', $guru->id) }}" onsubmit="return confirm('Hapus data guru {{ $guru->name }}?');" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -112,21 +123,21 @@
 
             <div>
                 <label class="block font-bold text-slate-700 mb-1">Nama Lengkap & Gelar *</label>
-                <input type="text" name="name" required placeholder="Contoh: Siti Rahmawati, S.Pd"
+                <input type="text" name="name" value="{{ old('name') }}" required placeholder="Contoh: Siti Rahmawati, S.Pd"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">NIP</label>
-                    <input type="text" name="nip" placeholder="Nomor Induk Pegawai"
+                    <input type="text" name="nip" value="{{ old('nip') }}" placeholder="Nomor Induk Pegawai"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Jenis Kelamin</label>
                     <select name="gender" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                        <option value="L">Laki-laki (L)</option>
-                        <option value="P">Perempuan (P)</option>
+                        <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>Laki-laki (L)</option>
+                        <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>Perempuan (P)</option>
                     </select>
                 </div>
             </div>
@@ -134,7 +145,7 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Email *</label>
-                    <input type="email" name="email" required placeholder="email@sekolah.sch.id"
+                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="email@sekolah.sch.id"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
                 <div>
@@ -145,8 +156,20 @@
             </div>
 
             <div>
+                <label class="block font-bold text-slate-700 mb-1">Penugasan Wali Kelas (Opsional)</label>
+                <select name="wali_kelas_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
+                    <option value="">-- Bukan Wali Kelas / Atur Nanti --</option>
+                    @foreach($kelasList as $kelas)
+                        <option value="{{ $kelas->id }}" {{ old('wali_kelas_id') == $kelas->id ? 'selected' : '' }}>
+                            Wali Kelas {{ $kelas->nama_kelas }} (Kelas {{ $kelas->tingkat }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
                 <label class="block font-bold text-slate-700 mb-1">Kontak Telepon / WA</label>
-                <input type="text" name="phone" placeholder="08xxxxxxxxxx"
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
@@ -206,6 +229,18 @@
             </div>
 
             <div>
+                <label class="block font-bold text-slate-700 mb-1">Penugasan Wali Kelas (Opsional)</label>
+                <select name="wali_kelas_id" id="edit_guru_wali_kelas_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
+                    <option value="">-- Bukan Wali Kelas --</option>
+                    @foreach($kelasList as $kelas)
+                        <option value="{{ $kelas->id }}">
+                            Wali Kelas {{ $kelas->nama_kelas }} (Kelas {{ $kelas->tingkat }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
                 <label class="block font-bold text-slate-700 mb-1">Kontak Telepon</label>
                 <input type="text" name="phone" id="edit_guru_phone"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
@@ -225,13 +260,18 @@
 @push('scripts')
 <script>
     function editGuru(guru) {
-        document.getElementById('formEditGuru').action = `/tu/guru/${guru.id}`;
-        document.getElementById('edit_guru_name').value = guru.name;
-        document.getElementById('edit_guru_nip').value = guru.nip ?? '';
-        document.getElementById('edit_guru_gender').value = guru.gender ?? 'L';
-        document.getElementById('edit_guru_email').value = guru.email;
-        document.getElementById('edit_guru_phone').value = guru.phone ?? '';
+        document.getElementById('formEditGuru').action = "{{ url('tu/guru') }}/" + guru.id;
+        document.getElementById('edit_guru_name').value = guru.name || '';
+        document.getElementById('edit_guru_nip').value = guru.nip || '';
+        document.getElementById('edit_guru_gender').value = guru.gender || 'L';
+        document.getElementById('edit_guru_email').value = guru.email || '';
+        document.getElementById('edit_guru_phone').value = guru.phone || '';
+        document.getElementById('edit_guru_wali_kelas_id').value = guru.wali_kelas_id || '';
         document.getElementById('modalEditGuru').classList.remove('hidden');
     }
+
+    @if($errors->any() && !old('_method'))
+        document.getElementById('modalTambahGuru').classList.remove('hidden');
+    @endif
 </script>
 @endpush

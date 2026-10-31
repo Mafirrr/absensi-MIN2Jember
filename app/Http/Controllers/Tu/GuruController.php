@@ -25,7 +25,7 @@ class GuruController extends Controller
         }
 
         $guruList = $query->orderBy('name', 'asc')->paginate(10)->withQueryString();
-        $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
+        $kelasList = Kelas::orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->get();
 
         return view('tu.guru.index', compact('guruList', 'kelasList', 'search'));
     }
@@ -39,14 +39,25 @@ class GuruController extends Controller
             'nip' => 'nullable|string|max:30|unique:users,nip',
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
+            'wali_kelas_id' => 'nullable|exists:kelas,id',
         ]);
 
-        $validated['role'] = 'guru';
-        $validated['password'] = Hash::make($validated['password']);
+        $guru = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'guru',
+            'nip' => !empty($validated['nip']) ? trim($validated['nip']) : null,
+            'phone' => !empty($validated['phone']) ? trim($validated['phone']) : null,
+            'gender' => $validated['gender'] ?? 'L',
+        ]);
 
-        User::create($validated);
+        if (!empty($validated['wali_kelas_id'])) {
+            Kelas::where('id', $validated['wali_kelas_id'])->update(['wali_kelas_id' => $guru->id]);
+            $guru->kelasAjar()->syncWithoutDetaching([$validated['wali_kelas_id']]);
+        }
 
-        return redirect()->route('tu.guru.index')->with('success', "Guru {$request->name} berhasil ditambahkan!");
+        return redirect()->route('tu.guru.index')->with('success', "Data guru {$guru->name} berhasil ditambahkan!");
     }
 
     public function update(Request $request, User $guru)
@@ -58,15 +69,29 @@ class GuruController extends Controller
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
             'password' => 'nullable|string|min:6',
+            'wali_kelas_id' => 'nullable|exists:kelas,id',
         ]);
 
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'nip' => !empty($validated['nip']) ? trim($validated['nip']) : null,
+            'phone' => !empty($validated['phone']) ? trim($validated['phone']) : null,
+            'gender' => $validated['gender'] ?? 'L',
+        ];
+
         if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
+            $updateData['password'] = Hash::make($validated['password']);
         }
 
-        $guru->update($validated);
+        $guru->update($updateData);
+
+        // Update penugasan wali kelas
+        Kelas::where('wali_kelas_id', $guru->id)->update(['wali_kelas_id' => null]);
+        if (!empty($validated['wali_kelas_id'])) {
+            Kelas::where('id', $validated['wali_kelas_id'])->update(['wali_kelas_id' => $guru->id]);
+            $guru->kelasAjar()->syncWithoutDetaching([$validated['wali_kelas_id']]);
+        }
 
         return redirect()->route('tu.guru.index')->with('success', "Data guru {$guru->name} berhasil diperbarui!");
     }
