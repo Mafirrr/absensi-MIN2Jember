@@ -10,7 +10,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
         <div>
             <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kelola Kelas</h2>
-            <p class="text-xs text-slate-400 font-medium mt-1">Manajemen rombongan belajar, tingkat kelas, jurusan, dan penugasan wali kelas.</p>
+            <p class="text-xs text-slate-400 font-medium mt-1">Manajemen rombongan belajar, tingkat kelas, dan penugasan wali kelas.</p>
         </div>
     </div>
 
@@ -48,7 +48,6 @@
                     <tr class="bg-slate-50/80 border-b border-slate-100 text-slate-400 font-bold">
                         <th class="py-3 px-5">Nama Kelas</th>
                         <th class="py-3 px-5">Tingkat</th>
-                        <th class="py-3 px-5">Jurusan</th>
                         <th class="py-3 px-5">Wali Kelas</th>
                         <th class="py-3 px-5 text-center">Jumlah Siswa</th>
                         <th class="py-3 px-5">Tahun Ajaran</th>
@@ -64,7 +63,6 @@
                                 </a>
                             </td>
                             <td class="py-3.5 px-5 text-slate-600 font-medium">Kelas {{ $kelas->tingkat }}</td>
-                            <td class="py-3.5 px-5 text-slate-500">{{ $kelas->jurusan ?? '-' }}</td>
                             <td class="py-3.5 px-5 font-bold text-slate-800">
                                 {{ $kelas->waliKelas ? $kelas->waliKelas->name : '-' }}
                             </td>
@@ -115,25 +113,20 @@
 
             <div>
                 <label class="block font-bold text-slate-700 mb-1">Nama Kelas *</label>
-                <input type="text" name="nama_kelas" required placeholder="Contoh: X RPL 1"
+                <input type="text" name="nama_kelas" required placeholder="Contoh: 1 A"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Tingkat *</label>
-                    <select name="tingkat" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                        <option value="10">Kelas 10 (X)</option>
-                        <option value="11">Kelas 11 (XI)</option>
-                        <option value="12">Kelas 12 (XII)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Jurusan</label>
-                    <input type="text" name="jurusan" placeholder="RPL, TKJ, dll"
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
-                </div>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">Tingkat *</label>
+                <select name="tingkat" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    <option value="1">Kelas 1</option>
+                    <option value="2">Kelas 2</option>
+                    <option value="3">Kelas 3</option>
+                    <option value="4">Kelas 4</option>
+                    <option value="5">Kelas 5</option>
+                    <option value="6">Kelas 6</option>
+                </select>
             </div>
 
             <div>
@@ -179,21 +172,16 @@
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Tingkat *</label>
-                    <select name="tingkat" id="edit_tingkat" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                        <option value="10">Kelas 10 (X)</option>
-                        <option value="11">Kelas 11 (XI)</option>
-                        <option value="12">Kelas 12 (XII)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Jurusan</label>
-                    <input type="text" name="jurusan" id="edit_jurusan"
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
-                </div>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">Tingkat *</label>
+                <select name="tingkat" id="edit_tingkat" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    <option value="1">Kelas 1</option>
+                    <option value="2">Kelas 2</option>
+                    <option value="3">Kelas 3</option>
+                    <option value="4">Kelas 4</option>
+                    <option value="5">Kelas 5</option>
+                    <option value="6">Kelas 6</option>
+                </select>
             </div>
 
             <div>
@@ -229,7 +217,6 @@
         document.getElementById('formEditKelas').action = `/tu/kelas/${kelas.id}`;
         document.getElementById('edit_nama_kelas').value = kelas.nama_kelas;
         document.getElementById('edit_tingkat').value = kelas.tingkat;
-        document.getElementById('edit_jurusan').value = kelas.jurusan ?? '';
         document.getElementById('edit_wali_kelas_id').value = kelas.wali_kelas_id ?? '';
         document.getElementById('edit_tahun_ajaran').value = kelas.tahun_ajaran;
         document.getElementById('modalEditKelas').classList.remove('hidden');

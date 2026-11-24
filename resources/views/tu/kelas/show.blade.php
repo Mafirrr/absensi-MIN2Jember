@@ -25,7 +25,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 mb-2">
-                    Tingkat {{ $kelas->tingkat }} &bull; {{ $kelas->jurusan ?? 'Umum' }}
+                    Kelas {{ $kelas->tingkat }}
                 </span>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ $kelas->nama_kelas }}</h2>
                 <p class="text-xs text-slate-500 mt-1">Tahun Ajaran: {{ $kelas->tahun_ajaran }}</p>

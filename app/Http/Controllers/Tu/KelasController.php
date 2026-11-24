@@ -18,7 +18,6 @@ class KelasController extends Controller
         if ($search) {
             $query->where('nama_kelas', 'like', "%{$search}%")
                   ->orWhere('tingkat', 'like', "%{$search}%")
-                  ->orWhere('jurusan', 'like', "%{$search}%")
                   ->orWhereHas('waliKelas', function ($q) use ($search) {
                       $q->where('name', 'like', "%{$search}%");
                   });

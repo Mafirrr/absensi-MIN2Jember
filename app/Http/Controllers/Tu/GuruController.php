@@ -45,29 +45,43 @@ class GuruController extends Controller
             'nip' => 'nullable|string|max:30|unique:users,nip',
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
-            'jenis_guru' => 'required|in:guru_kelas,guru_mapel',
+            'jenis_guru' => 'nullable|in:guru_kelas,guru_mapel',
             'mata_pelajaran' => 'nullable|string|max:100',
+            'wali_kelas_id' => 'nullable|exists:kelas,id',
             'kelas_ajar' => 'nullable|array',
             'kelas_ajar.*' => 'exists:kelas,id',
         ]);
 
-        $validated['role'] = 'guru';
-        $validated['password'] = Hash::make($validated['password']);
+        $jenisGuru = $validated['jenis_guru'] ?? (!empty($validated['wali_kelas_id']) ? 'guru_kelas' : 'guru_kelas');
 
-        $kelasAjarIds = $validated['kelas_ajar'] ?? [];
-        unset($validated['kelas_ajar']);
+        $guru = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'guru',
+            'jenis_guru' => $jenisGuru,
+            'mata_pelajaran' => $validated['mata_pelajaran'] ?? ($jenisGuru === 'guru_kelas' ? 'Guru Kelas' : null),
+            'nip' => !empty($validated['nip']) ? trim($validated['nip']) : null,
+            'phone' => !empty($validated['phone']) ? trim($validated['phone']) : null,
+            'gender' => $validated['gender'] ?? 'L',
+        ]);
 
-        $guru = User::create($validated);
-
-        if (!empty($kelasAjarIds)) {
-            $attachData = [];
-            foreach ($kelasAjarIds as $kid) {
-                $attachData[$kid] = ['mata_pelajaran' => $validated['mata_pelajaran'] ?? null];
-            }
-            $guru->kelasAjar()->sync($attachData);
+        // Penugasan Wali Kelas jika dipilih
+        if (!empty($validated['wali_kelas_id'])) {
+            Kelas::where('id', $validated['wali_kelas_id'])->update(['wali_kelas_id' => $guru->id]);
+            $guru->kelasAjar()->syncWithoutDetaching([$validated['wali_kelas_id']]);
         }
 
-        return redirect()->route('tu.guru.index')->with('success', "Guru {$request->name} berhasil ditambahkan!");
+        // Penugasan Kelas Ajar (misal Guru Mapel)
+        if (!empty($validated['kelas_ajar'])) {
+            $attachData = [];
+            foreach ($validated['kelas_ajar'] as $kid) {
+                $attachData[$kid] = ['mata_pelajaran' => $guru->mata_pelajaran];
+            }
+            $guru->kelasAjar()->syncWithoutDetaching($attachData);
+        }
+
+        return redirect()->route('tu.guru.index')->with('success', "Data guru {$guru->name} berhasil ditambahkan!");
     }
 
     public function update(Request $request, User $guru)
@@ -79,28 +93,55 @@ class GuruController extends Controller
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
             'password' => 'nullable|string|min:6',
-            'jenis_guru' => 'required|in:guru_kelas,guru_mapel',
+            'jenis_guru' => 'nullable|in:guru_kelas,guru_mapel',
             'mata_pelajaran' => 'nullable|string|max:100',
+            'wali_kelas_id' => 'nullable|exists:kelas,id',
             'kelas_ajar' => 'nullable|array',
             'kelas_ajar.*' => 'exists:kelas,id',
         ]);
 
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'nip' => !empty($validated['nip']) ? trim($validated['nip']) : null,
+            'phone' => !empty($validated['phone']) ? trim($validated['phone']) : null,
+            'gender' => $validated['gender'] ?? 'L',
+        ];
+
+        if (isset($validated['jenis_guru'])) {
+            $updateData['jenis_guru'] = $validated['jenis_guru'];
+        }
+
+        if (array_key_exists('mata_pelajaran', $validated)) {
+            $updateData['mata_pelajaran'] = $validated['mata_pelajaran'];
+        }
+
         if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
+            $updateData['password'] = Hash::make($validated['password']);
         }
 
-        $kelasAjarIds = $validated['kelas_ajar'] ?? [];
-        unset($validated['kelas_ajar']);
+        $guru->update($updateData);
 
-        $guru->update($validated);
-
-        $attachData = [];
-        foreach ($kelasAjarIds as $kid) {
-            $attachData[$kid] = ['mata_pelajaran' => $validated['mata_pelajaran'] ?? null];
+        // Update penugasan wali kelas
+        if ($request->has('wali_kelas_id')) {
+            Kelas::where('wali_kelas_id', $guru->id)->update(['wali_kelas_id' => null]);
+            if (!empty($validated['wali_kelas_id'])) {
+                Kelas::where('id', $validated['wali_kelas_id'])->update(['wali_kelas_id' => $guru->id]);
+                $guru->kelasAjar()->syncWithoutDetaching([$validated['wali_kelas_id']]);
+            }
         }
-        $guru->kelasAjar()->sync($attachData);
+
+        // Update penugasan kelas ajar
+        if ($request->has('kelas_ajar')) {
+            $attachData = [];
+            foreach ($validated['kelas_ajar'] ?? [] as $kid) {
+                $attachData[$kid] = ['mata_pelajaran' => $guru->mata_pelajaran];
+            }
+            $guru->kelasAjar()->sync($attachData);
+            if (!empty($validated['wali_kelas_id'])) {
+                $guru->kelasAjar()->syncWithoutDetaching([$validated['wali_kelas_id']]);
+            }
+        }
 
         return redirect()->route('tu.guru.index')->with('success', "Data guru {$guru->name} berhasil diperbarui!");
     }
@@ -131,4 +172,3 @@ class GuruController extends Controller
         return redirect()->route('tu.guru.index')->with('success', "Guru {$name} berhasil dihapus.");
     }
 }
-

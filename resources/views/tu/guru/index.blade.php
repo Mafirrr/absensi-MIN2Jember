@@ -31,11 +31,11 @@
 
             <select name="jenis_guru" onchange="this.form.submit()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
                 <option value="">Semua Jenis Guru</option>
-                <option value="guru_kelas" {{ $jenisGuru == 'guru_kelas' ? 'selected' : '' }}>Guru Kelas (Wali)</option>
-                <option value="guru_mapel" {{ $jenisGuru == 'guru_mapel' ? 'selected' : '' }}>Guru Mata Pelajaran (Mapel)</option>
+                <option value="guru_kelas" {{ ($jenisGuru ?? '') == 'guru_kelas' ? 'selected' : '' }}>Guru Kelas (Wali)</option>
+                <option value="guru_mapel" {{ ($jenisGuru ?? '') == 'guru_mapel' ? 'selected' : '' }}>Guru Mata Pelajaran (Mapel)</option>
             </select>
 
-            @if($search || $jenisGuru)
+            @if($search || !empty($jenisGuru))
                 <a href="{{ route('tu.guru.index') }}" class="text-xs text-slate-400 hover:text-slate-700 ml-1 font-bold">Reset</a>
             @endif
         </form>
@@ -106,7 +106,21 @@
                             <td class="py-3.5 px-5 text-brand-600 font-medium">{{ $guru->email }}</td>
                             <td class="py-3.5 px-5 text-slate-500">{{ $guru->phone ?? '-' }}</td>
                             <td class="py-3.5 px-5 text-right space-x-3">
-                                <button type="button" onclick="editGuruData({{ json_encode($guru) }}, {{ json_encode($guru->kelasAjar->pluck('id')) }})" class="text-amber-600 hover:text-amber-700 font-bold">Edit</button>
+                                <button type="button" 
+                                    data-guru="{{ json_encode([
+                                        'id' => $guru->id,
+                                        'name' => $guru->name,
+                                        'nip' => $guru->nip,
+                                        'gender' => $guru->gender,
+                                        'email' => $guru->email,
+                                        'phone' => $guru->phone,
+                                        'jenis_guru' => $guru->jenis_guru ?? 'guru_kelas',
+                                        'mata_pelajaran' => $guru->mata_pelajaran ?? '',
+                                        'wali_kelas_id' => $guru->kelasWali->first()?->id ?? '',
+                                    ]) }}"
+                                    data-kelas-ajar="{{ json_encode($guru->kelasAjar->pluck('id')) }}"
+                                    onclick="editGuruData(JSON.parse(this.dataset.guru), JSON.parse(this.dataset.kelasAjar))" 
+                                    class="text-amber-600 hover:text-amber-700 font-bold">Edit</button>
                                 <form method="POST" action="{{ route('tu.guru.destroy', $guru->id) }}" onsubmit="return confirm('Hapus data guru {{ $guru->name }}?');" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -145,7 +159,7 @@
 
             <div>
                 <label class="block font-bold text-slate-700 mb-1">Nama Lengkap & Gelar *</label>
-                <input type="text" name="name" required placeholder="Contoh: Saroji, S.Pd.I"
+                <input type="text" name="name" value="{{ old('name') }}" required placeholder="Contoh: Saroji, S.Pd.I"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
@@ -159,15 +173,26 @@
                 </div>
                 <div id="wrapperTambahMapel">
                     <label class="block font-bold text-slate-700 mb-1">Mata Pelajaran</label>
-                    <input type="text" name="mata_pelajaran" placeholder="Contoh: Aqidah Akhlak / Fikih"
+                    <input type="text" name="mata_pelajaran" value="{{ old('mata_pelajaran') }}" placeholder="Contoh: Aqidah Akhlak / Fikih"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
+            </div>
+
+            <!-- Pilihan Wali Kelas -->
+            <div id="wrapperTambahWaliKelas">
+                <label class="block font-bold text-slate-700 mb-1">Penugasan Wali Kelas (Jika Guru Kelas)</label>
+                <select name="wali_kelas_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    <option value="">-- Bukan Wali Kelas / Belum Ditugaskan --</option>
+                    @foreach($kelasList as $k)
+                        <option value="{{ $k->id }}">Kelas {{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">NIP</label>
-                    <input type="text" name="nip" placeholder="Nomor Induk Pegawai"
+                    <input type="text" name="nip" value="{{ old('nip') }}" placeholder="Nomor Induk Pegawai"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
                 <div>
@@ -182,7 +207,7 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Email *</label>
-                    <input type="email" name="email" required placeholder="email@sekolah.sch.id"
+                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="email@sekolah.sch.id"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
                 <div>
@@ -194,13 +219,13 @@
 
             <div>
                 <label class="block font-bold text-slate-700 mb-1">Kontak Telepon / WA</label>
-                <input type="text" name="phone" placeholder="08xxxxxxxxxx"
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx"
                     class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
             </div>
 
-            <!-- Penugasan Kelas Ajar (Untuk Guru Mapel) -->
+            <!-- Penugasan Kelas Ajar (Untuk Guru Mapel / Ajar) -->
             <div>
-                <label class="block font-bold text-slate-700 mb-1.5">Penugasan Rombel Ajar (Opsional)</label>
+                <label class="block font-bold text-slate-700 mb-1.5">Penugasan Rombel Ajar (Opsional / Guru Mapel)</label>
                 <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl max-h-36 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-2">
                     @foreach($kelasList as $k)
                         <label class="flex items-center space-x-1.5 text-[11px] text-slate-700 cursor-pointer">
@@ -251,6 +276,17 @@
                     <input type="text" name="mata_pelajaran" id="edit_guru_mapel" placeholder="Contoh: Aqidah Akhlak"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white">
                 </div>
+            </div>
+
+            <!-- Edit Wali Kelas -->
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">Penugasan Wali Kelas</label>
+                <select name="wali_kelas_id" id="edit_guru_wali_kelas_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    <option value="">-- Bukan Wali Kelas / Kosongkan --</option>
+                    @foreach($kelasList as $k)
+                        <option value="{{ $k->id }}">Kelas {{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -323,14 +359,15 @@
     }
 
     function editGuruData(guru, kelasAjarIds) {
-        document.getElementById('formEditGuru').action = `/tu/guru/${guru.id}`;
-        document.getElementById('edit_guru_name').value = guru.name;
-        document.getElementById('edit_guru_nip').value = guru.nip ?? '';
-        document.getElementById('edit_guru_gender').value = guru.gender ?? 'L';
-        document.getElementById('edit_guru_email').value = guru.email;
-        document.getElementById('edit_guru_phone').value = guru.phone ?? '';
-        document.getElementById('edit_guru_jenis').value = guru.jenis_guru ?? 'guru_kelas';
-        document.getElementById('edit_guru_mapel').value = guru.mata_pelajaran ?? '';
+        document.getElementById('formEditGuru').action = "{{ url('tu/guru') }}/" + guru.id;
+        document.getElementById('edit_guru_name').value = guru.name || '';
+        document.getElementById('edit_guru_nip').value = guru.nip || '';
+        document.getElementById('edit_guru_gender').value = guru.gender || 'L';
+        document.getElementById('edit_guru_email').value = guru.email || '';
+        document.getElementById('edit_guru_phone').value = guru.phone || '';
+        document.getElementById('edit_guru_jenis').value = guru.jenis_guru || 'guru_kelas';
+        document.getElementById('edit_guru_mapel').value = guru.mata_pelajaran || '';
+        document.getElementById('edit_guru_wali_kelas_id').value = guru.wali_kelas_id || '';
 
         // Reset check boxes
         document.querySelectorAll('.edit-kelas-checkbox').forEach(cb => cb.checked = false);
@@ -343,5 +380,9 @@
 
         document.getElementById('modalEditGuru').classList.remove('hidden');
     }
+
+    @if($errors->any() && !old('_method'))
+        document.getElementById('modalTambahGuru').classList.remove('hidden');
+    @endif
 </script>
 @endpush
