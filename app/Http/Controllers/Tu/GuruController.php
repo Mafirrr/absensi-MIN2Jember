@@ -13,21 +13,27 @@ class GuruController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $jenisGuru = $request->query('jenis_guru');
 
         $query = User::where('role', 'guru')->with(['kelasWali', 'kelasAjar']);
+
+        if ($jenisGuru) {
+            $query->where('jenis_guru', $jenisGuru);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('nip', 'like', "%{$search}%");
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('mata_pelajaran', 'like', "%{$search}%");
             });
         }
 
-        $guruList = $query->orderBy('name', 'asc')->paginate(10)->withQueryString();
-        $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
+        $guruList = $query->orderBy('name', 'asc')->paginate(15)->withQueryString();
+        $kelasList = Kelas::orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->get();
 
-        return view('tu.guru.index', compact('guruList', 'kelasList', 'search'));
+        return view('tu.guru.index', compact('guruList', 'kelasList', 'search', 'jenisGuru'));
     }
 
     public function store(Request $request)
@@ -39,12 +45,27 @@ class GuruController extends Controller
             'nip' => 'nullable|string|max:30|unique:users,nip',
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
+            'jenis_guru' => 'required|in:guru_kelas,guru_mapel',
+            'mata_pelajaran' => 'nullable|string|max:100',
+            'kelas_ajar' => 'nullable|array',
+            'kelas_ajar.*' => 'exists:kelas,id',
         ]);
 
         $validated['role'] = 'guru';
         $validated['password'] = Hash::make($validated['password']);
 
-        User::create($validated);
+        $kelasAjarIds = $validated['kelas_ajar'] ?? [];
+        unset($validated['kelas_ajar']);
+
+        $guru = User::create($validated);
+
+        if (!empty($kelasAjarIds)) {
+            $attachData = [];
+            foreach ($kelasAjarIds as $kid) {
+                $attachData[$kid] = ['mata_pelajaran' => $validated['mata_pelajaran'] ?? null];
+            }
+            $guru->kelasAjar()->sync($attachData);
+        }
 
         return redirect()->route('tu.guru.index')->with('success', "Guru {$request->name} berhasil ditambahkan!");
     }
@@ -58,6 +79,10 @@ class GuruController extends Controller
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|in:L,P',
             'password' => 'nullable|string|min:6',
+            'jenis_guru' => 'required|in:guru_kelas,guru_mapel',
+            'mata_pelajaran' => 'nullable|string|max:100',
+            'kelas_ajar' => 'nullable|array',
+            'kelas_ajar.*' => 'exists:kelas,id',
         ]);
 
         if (!empty($validated['password'])) {
@@ -66,7 +91,16 @@ class GuruController extends Controller
             unset($validated['password']);
         }
 
+        $kelasAjarIds = $validated['kelas_ajar'] ?? [];
+        unset($validated['kelas_ajar']);
+
         $guru->update($validated);
+
+        $attachData = [];
+        foreach ($kelasAjarIds as $kid) {
+            $attachData[$kid] = ['mata_pelajaran' => $validated['mata_pelajaran'] ?? null];
+        }
+        $guru->kelasAjar()->sync($attachData);
 
         return redirect()->route('tu.guru.index')->with('success', "Data guru {$guru->name} berhasil diperbarui!");
     }

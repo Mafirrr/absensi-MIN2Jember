@@ -18,6 +18,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        if (!$request->session()->has('_sec_nonce_token')) {
+            abort(419, 'Page Expired: Security token validation failed.');
+        }
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],

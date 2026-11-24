@@ -49,13 +49,30 @@
             @endif
         </form>
 
-        <button onclick="document.getElementById('modalTambahSiswa').classList.remove('hidden')"
-            class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/25 transition self-start md:self-auto flex items-center space-x-1.5 flex-shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            <span>Tambah Siswa</span>
-        </button>
+        <div class="flex items-center space-x-2 self-start md:self-auto flex-shrink-0">
+            <a href="{{ route('tu.siswa.template') }}" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs" title="Unduh Template Excel">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                <span class="hidden sm:inline">Template</span>
+            </a>
+
+            <button type="button" onclick="document.getElementById('modalBulkSiswaTu').classList.remove('hidden')"
+                class="px-3.5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span>Tambah Sekaligus</span>
+            </button>
+
+            <button onclick="document.getElementById('modalTambahSiswa').classList.remove('hidden')"
+                class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/25 transition flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                <span>Tambah Siswa</span>
+            </button>
+        </div>
     </div>
 
     <!-- Table Siswa -->
@@ -293,6 +310,89 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Tambah Sekaligus / Bulk Import (TU) -->
+<div id="modalBulkSiswaTu" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs hidden p-4">
+    <div class="bg-white rounded-2xl w-full max-w-xl shadow-2xl border border-slate-100 overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h3 class="text-sm font-extrabold text-slate-900">Tambah Siswa Sekaligus (Bulk / Import)</h3>
+                <p class="text-[11px] text-slate-500">Pilih rombel kelas dan masukkan data siswa secara massal.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('modalBulkSiswaTu').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 text-base font-bold">&times;</button>
+        </div>
+
+        <form method="POST" action="{{ route('tu.siswa.bulk') }}" enctype="multipart/form-data" class="p-5 space-y-4">
+            @csrf
+            <div>
+                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Rombel Kelas Tujuan *</label>
+                <select name="kelas_id" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-brand-500">
+                    <option value="">-- Pilih Rombel Kelas --</option>
+                    @foreach($kelasList as $k)
+                        <option value="{{ $k->id }}" {{ $kelasId == $k->id ? 'selected' : '' }}>
+                            Kelas {{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Tab Tipe Input -->
+            <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <label class="flex items-center space-x-1.5 cursor-pointer text-xs font-bold text-slate-700">
+                    <input type="radio" name="tipe_input" value="text" checked onchange="toggleTuBulkType('text')" class="text-emerald-600 focus:ring-emerald-500">
+                    <span>Salin / Tempel Teks (Paste dari Excel)</span>
+                </label>
+                <span class="text-slate-300">|</span>
+                <label class="flex items-center space-x-1.5 cursor-pointer text-xs font-bold text-slate-700">
+                    <input type="radio" name="tipe_input" value="file" onchange="toggleTuBulkType('file')" class="text-emerald-600 focus:ring-emerald-500">
+                    <span>Upload File Excel (.xlsx / .csv)</span>
+                </label>
+            </div>
+
+            <!-- Bagian Text Paste -->
+            <div id="tuSectionText" class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase">Tempel Baris Siswa *</label>
+                    <span class="text-[10px] text-slate-400">Pemisah: Koma (,) atau Tab Excel</span>
+                </div>
+                <textarea name="raw_text" rows="6" placeholder="Contoh format per baris:
+1001, 00151001, Ahmad Dani Pratama, L, 081234567890
+1002, 00151002, Aisyah Putri Azzahra, P, 081234567891
+1003, 00151003, Bilal Habiburrahman, L, 081234567892" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 focus:ring-2 focus:ring-brand-500"></textarea>
+                <p class="text-[10px] text-slate-500">
+                    💡 <em>Tip: Anda bisa langsung memblok & menyalin (copy-paste) kolom NIS, NISN, Nama, JK, No HP dari lembar Excel Anda ke dalam kotak ini.</em>
+                </p>
+            </div>
+
+            <!-- Bagian Upload File -->
+            <div id="tuSectionFile" class="space-y-2 hidden">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase">Pilih File Excel / CSV *</label>
+                <input type="file" name="file_excel" accept=".xlsx,.xls,.csv" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-brand-500">
+                <div class="flex items-center justify-between pt-1">
+                    <span class="text-[10px] text-slate-500">Format kolom: NIS, NISN, Nama Lengkap, JK (L/P), No HP Ortu</span>
+                    <a href="{{ route('tu.siswa.template') }}" class="text-[11px] text-brand-600 hover:underline font-bold">Unduh Template &rarr;</a>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2">
+                <button type="button" onclick="document.getElementById('modalBulkSiswaTu').classList.add('hidden')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+                <button type="submit" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/25 transition">Mulai Tambah Sekaligus</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleTuBulkType(type) {
+        if (type === 'file') {
+            document.getElementById('tuSectionFile').classList.remove('hidden');
+            document.getElementById('tuSectionText').classList.add('hidden');
+        } else {
+            document.getElementById('tuSectionFile').classList.add('hidden');
+            document.getElementById('tuSectionText').classList.remove('hidden');
+        }
+    }
+</script>
 
 @endsection
 

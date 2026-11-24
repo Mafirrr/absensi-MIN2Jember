@@ -132,13 +132,24 @@
                                 </a>
 
                                 <a href="{{ route('tu.rekap.bulanan') }}"
-                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.rekap.bulanan') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.rekap.bulanan*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.rekap.bulanan') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
-                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.rekap.bulanan') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.rekap.bulanan*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.rekap.bulanan*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                         <span>Rekap Bulanan</span>
+                                    </div>
+                                </a>
+
+                                <a href="{{ route('tu.rekap.semester') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('tu.rekap.semester*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('tu.rekap.semester*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('tu.rekap.semester*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Rekap Semester</span>
                                     </div>
                                 </a>
                             @else
@@ -164,14 +175,36 @@
                                     </div>
                                 </a>
 
-                                <a href="{{ route('guru.rekap.bulanan') }}"
-                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.rekap.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                <a href="{{ route('guru.siswa.index') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.siswa.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.rekap.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
-                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.rekap.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.siswa.*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.siswa.*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <span>Data Siswa</span>
+                                    </div>
+                                </a>
+
+                                <a href="{{ route('guru.rekap.bulanan') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.rekap.bulanan*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.rekap.bulanan*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.rekap.bulanan*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                         <span>Rekap Bulanan</span>
+                                    </div>
+                                </a>
+
+                                <a href="{{ route('guru.rekap.semester') }}"
+                                   class="group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ request()->routeIs('guru.rekap.semester*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 rounded-full {{ request()->routeIs('guru.rekap.semester*') ? 'bg-emerald-600' : 'bg-transparent' }}"></div>
+                                        <svg class="w-4 h-4 {{ request()->routeIs('guru.rekap.semester*') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Rekap Semester</span>
                                     </div>
                                 </a>
                             @endif

@@ -5,10 +5,54 @@ namespace App\Http\Controllers\Tu;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Services\SiswaImportService;
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
+    protected SiswaImportService $importService;
+
+    public function __construct(SiswaImportService $importService)
+    {
+        $this->importService = $importService;
+    }
+
+    public function downloadTemplate()
+    {
+        return $this->importService->generateTemplate();
+    }
+
+    public function bulkStore(Request $request)
+    {
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas,id',
+            'tipe_input' => 'required|in:text,file',
+            'raw_text' => 'required_if:tipe_input,text|nullable|string',
+            'file_excel' => 'required_if:tipe_input,file|nullable|file|mimes:xlsx,xls,csv|max:5120',
+        ]);
+
+        $kelasId = (int) $request->kelas_id;
+
+        if ($request->tipe_input === 'file' && $request->hasFile('file_excel')) {
+            $result = $this->importService->importFromFile($request->file('file_excel'), $kelasId);
+        } else {
+            $result = $this->importService->importFromText($request->raw_text ?? '', $kelasId);
+        }
+
+        $msg = "Berhasil menambahkan {$result['success_count']} siswa sekaligus!";
+        if ($result['existing_count'] > 0) {
+            $msg .= " ({$result['existing_count']} siswa dilewati karena NIS sudah terdaftar).";
+        }
+
+        if (!empty($result['errors'])) {
+            return redirect()->route('tu.siswa.index', ['kelas_id' => $kelasId])
+                ->with('success', $msg)
+                ->with('warning', implode(' | ', array_slice($result['errors'], 0, 3)));
+        }
+
+        return redirect()->route('tu.siswa.index', ['kelas_id' => $kelasId])
+            ->with('success', $msg);
+    }
     public function index(Request $request)
     {
         $search = $request->query('search');

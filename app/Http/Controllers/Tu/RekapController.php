@@ -6,11 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Services\RekapExportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RekapController extends Controller
 {
+    protected RekapExportService $exportService;
+
+    public function __construct(RekapExportService $exportService)
+    {
+        $this->exportService = $exportService;
+    }
+
     /**
      * Rekap Harian untuk TU (bisa akses semua kelas)
      */
@@ -19,7 +27,7 @@ class RekapController extends Controller
         $tanggal = $request->query('tanggal', Carbon::today()->format('Y-m-d'));
         $kelasId = $request->query('kelas_id');
 
-        $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
+        $kelasList = Kelas::orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->get();
 
         $query = Absensi::with(['siswa', 'kelas', 'guru'])
             ->where('absensi.tanggal', $tanggal);
@@ -64,81 +72,26 @@ class RekapController extends Controller
         $bulan = (int) $request->query('bulan', Carbon::now()->month);
         $tahun = (int) $request->query('tahun', Carbon::now()->year);
 
-        $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
+        $kelasList = Kelas::orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->get();
         $kelasId = $request->query('kelas_id', $kelasList->first()?->id);
 
         $selectedKelas = $kelasId ? Kelas::with('waliKelas')->find($kelasId) : null;
-
-        $daysInMonth = Carbon::createFromDate($tahun, $bulan, 1)->daysInMonth;
-        $monthDates = [];
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $monthDates[] = Carbon::createFromDate($tahun, $bulan, $day);
-        }
 
         $matrix = [];
         $totalHadirBulan = 0;
         $totalIzinBulan = 0;
         $totalSakitBulan = 0;
         $totalAlpaBulan = 0;
+        $monthDates = [];
 
         if ($selectedKelas) {
-            $siswaList = Siswa::where('kelas_id', $selectedKelas->id)
-                ->where('status', 'aktif')
-                ->orderBy('no_absen', 'asc')
-                ->orderBy('nama_lengkap', 'asc')
-                ->get();
-
-            $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->format('Y-m-d');
-            $endDate = Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->format('Y-m-d');
-
-            $absensiRecords = Absensi::where('kelas_id', $selectedKelas->id)
-                ->whereBetween('tanggal', [$startDate, $endDate])
-                ->get()
-                ->groupBy('siswa_id');
-
-            foreach ($siswaList as $siswa) {
-                $siswaAbsensi = $absensiRecords->get($siswa->id, collect())
-                    ->keyBy(fn ($a) => is_string($a->tanggal) ? substr($a->tanggal, 0, 10) : $a->tanggal->format('Y-m-d'));
-                $h = 0;
-                $i = 0;
-                $s = 0;
-                $a = 0;
-
-                $dailyStatus = [];
-                foreach ($monthDates as $cDate) {
-                    $dStr = $cDate->format('Y-m-d');
-                    $record = $siswaAbsensi->get($dStr);
-                    $status = $record ? $record->status : null;
-                    $dailyStatus[$cDate->day] = [
-                        'status' => $status,
-                        'is_weekend' => $cDate->isWeekend(),
-                    ];
-
-                    if ($status === 'hadir') $h++;
-                    elseif ($status === 'izin') $i++;
-                    elseif ($status === 'sakit') $s++;
-                    elseif ($status === 'alpa') $a++;
-                }
-
-                $totalRecorded = $h + $i + $s + $a;
-                $persentase = $totalRecorded > 0 ? round(($h / $totalRecorded) * 100, 1) : 0;
-
-                $totalHadirBulan += $h;
-                $totalIzinBulan += $i;
-                $totalSakitBulan += $s;
-                $totalAlpaBulan += $a;
-
-                $matrix[] = [
-                    'siswa' => $siswa,
-                    'daily' => $dailyStatus,
-                    'h' => $h,
-                    'i' => $i,
-                    's' => $s,
-                    'a' => $a,
-                    'total' => $totalRecorded,
-                    'persen' => $persentase,
-                ];
-            }
+            $data = $this->exportService->getMonthlyData($selectedKelas, $bulan, $tahun);
+            $monthDates = $data['monthDates'];
+            $matrix = $data['matrix'];
+            $totalHadirBulan = $data['totalH'];
+            $totalIzinBulan = $data['totalI'];
+            $totalSakitBulan = $data['totalS'];
+            $totalAlpaBulan = $data['totalA'];
         }
 
         return view('tu.rekap.bulanan', compact(
@@ -155,5 +108,115 @@ class RekapController extends Controller
             'totalAlpaBulan'
         ));
     }
-}
 
+    /**
+     * Download Excel Rekap Bulanan TU
+     */
+    public function exportBulananExcel(Request $request)
+    {
+        $kelasId = (int) $request->query('kelas_id');
+        $bulan = (int) $request->query('bulan', Carbon::now()->month);
+        $tahun = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getMonthlyData($kelas, $bulan, $tahun);
+
+        return $this->exportService->exportMonthlyExcel($data);
+    }
+
+    /**
+     * Download PDF Rekap Bulanan TU
+     */
+    public function exportBulananPdf(Request $request)
+    {
+        $kelasId = (int) $request->query('kelas_id');
+        $bulan = (int) $request->query('bulan', Carbon::now()->month);
+        $tahun = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getMonthlyData($kelas, $bulan, $tahun);
+
+        return $this->exportService->exportMonthlyPdf($data);
+    }
+
+    /**
+     * Rekap Semesteran untuk TU
+     */
+    public function semester(Request $request)
+    {
+        $semester = $request->query('semester', Carbon::now()->month >= 7 ? 'ganjil' : 'genap');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->month >= 7 ? Carbon::now()->year : Carbon::now()->year - 1);
+
+        $kelasList = Kelas::orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->get();
+        $kelasId = $request->query('kelas_id', $kelasList->first()?->id);
+
+        $selectedKelas = $kelasId ? Kelas::with('waliKelas')->find($kelasId) : null;
+
+        $matrix = [];
+        $totalSemesterH = 0;
+        $totalSemesterI = 0;
+        $totalSemesterS = 0;
+        $totalSemesterA = 0;
+        $bulanList = [];
+        $labelSemester = '';
+        $tahunAjaran = '';
+
+        if ($selectedKelas) {
+            $data = $this->exportService->getSemesterData($selectedKelas, $semester, $tahunMulai);
+            $matrix = $data['matrix'];
+            $totalSemesterH = $data['totalH'];
+            $totalSemesterI = $data['totalI'];
+            $totalSemesterS = $data['totalS'];
+            $totalSemesterA = $data['totalA'];
+            $bulanList = $data['bulanList'];
+            $labelSemester = $data['labelSemester'];
+            $tahunAjaran = $data['tahunAjaran'];
+        }
+
+        return view('tu.rekap.semester', compact(
+            'semester',
+            'tahunMulai',
+            'tahunAjaran',
+            'labelSemester',
+            'kelasId',
+            'kelasList',
+            'selectedKelas',
+            'bulanList',
+            'matrix',
+            'totalSemesterH',
+            'totalSemesterI',
+            'totalSemesterS',
+            'totalSemesterA'
+        ));
+    }
+
+    /**
+     * Download Excel Rekap Semester TU
+     */
+    public function exportSemesterExcel(Request $request)
+    {
+        $kelasId = (int) $request->query('kelas_id');
+        $semester = $request->query('semester', 'ganjil');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getSemesterData($kelas, $semester, $tahunMulai);
+
+        return $this->exportService->exportSemesterExcel($data);
+    }
+
+    /**
+     * Download PDF Rekap Semester TU
+     */
+    public function exportSemesterPdf(Request $request)
+    {
+        $kelasId = (int) $request->query('kelas_id');
+        $semester = $request->query('semester', 'ganjil');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getSemesterData($kelas, $semester, $tahunMulai);
+
+        return $this->exportService->exportSemesterPdf($data);
+    }
+}

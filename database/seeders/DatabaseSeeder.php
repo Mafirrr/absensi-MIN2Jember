@@ -8,7 +8,9 @@ use App\Models\Siswa;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +19,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Bersihkan data lama agar seeder dapat dijalankan berulang kali tanpa duplikasi
+        Schema::disableForeignKeyConstraints();
+        Absensi::truncate();
+        DB::table('guru_kelas')->truncate();
+        Siswa::truncate();
+        Kelas::truncate();
+        User::truncate();
+        Schema::enableForeignKeyConstraints();
+
         // 1. Seed Users (TU & Guru)
         $tu = User::create([
             'name' => 'Budi Santoso, S.Kom (Tata Usaha)',

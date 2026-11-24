@@ -19,6 +19,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'jenis_guru',
+        'mata_pelajaran',
         'nip',
         'phone',
         'gender',
@@ -45,6 +47,30 @@ class User extends Authenticatable
     public function isGuru(): bool
     {
         return $this->role === 'guru';
+    }
+
+    public function isGuruMapel(): bool
+    {
+        return $this->isGuru() && $this->jenis_guru === 'guru_mapel';
+    }
+
+    public function isGuruKelas(): bool
+    {
+        return $this->isGuru() && ($this->jenis_guru === 'guru_kelas' || empty($this->jenis_guru));
+    }
+
+    public function getJabatanLabelAttribute(): string
+    {
+        if ($this->isTU()) {
+            return 'Tata Usaha';
+        }
+        if ($this->isGuruMapel()) {
+            return 'Guru Mapel ' . ($this->mata_pelajaran ?: '');
+        }
+        if ($this->kelasWali->isNotEmpty()) {
+            return 'Wali Kelas ' . $this->kelasWali->first()->nama_kelas;
+        }
+        return 'Guru Kelas';
     }
 
     public function kelasWali(): HasMany

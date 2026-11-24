@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Models\Absensi;
 use App\Models\Kelas;
-use App\Models\Siswa;
+use App\Services\RekapExportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RekapController extends Controller
 {
+    protected RekapExportService $exportService;
+
+    public function __construct(RekapExportService $exportService)
+    {
+        $this->exportService = $exportService;
+    }
+
     /**
-     * Rekap Bulanan untuk Guru (hanya kelas yang diajar/wali)
+     * Rekap Bulanan untuk Guru
      */
     public function bulanan(Request $request)
     {
@@ -39,101 +45,158 @@ class RekapController extends Controller
 
         $bulan = (int) $request->query('bulan', Carbon::now()->month);
         $tahun = (int) $request->query('tahun', Carbon::now()->year);
-
         $kelasId = $request->query('kelas_id', $kelasList->first()->id);
 
-        // Security check: Guru only accesses their classes
         if (!in_array($kelasId, $accessibleKelasIds)) {
             abort(403, 'Anda tidak memiliki hak akses untuk melihat rekap kelas ini.');
         }
 
         $selectedKelas = $kelasList->firstWhere('id', $kelasId);
+        $data = $this->exportService->getMonthlyData($selectedKelas, $bulan, $tahun);
 
-        $daysInMonth = Carbon::createFromDate($tahun, $bulan, 1)->daysInMonth;
-        $monthDates = [];
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $monthDates[] = Carbon::createFromDate($tahun, $bulan, $day);
+        return view('guru.rekap.bulanan', [
+            'kelasList' => $kelasList,
+            'selectedKelas' => $selectedKelas,
+            'kelasId' => $kelasId,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'monthDates' => $data['monthDates'],
+            'matrix' => $data['matrix'],
+            'totalHadirBulan' => $data['totalH'],
+            'totalIzinBulan' => $data['totalI'],
+            'totalSakitBulan' => $data['totalS'],
+            'totalAlpaBulan' => $data['totalA'],
+        ]);
+    }
+
+    public function exportBulananExcel(Request $request)
+    {
+        $user = Auth::user();
+        $accessibleKelasIds = $user->getAccessibleKelasIds();
+
+        $kelasId = (int) $request->query('kelas_id');
+        if (!in_array($kelasId, $accessibleKelasIds)) {
+            abort(403, 'Akses ditolak.');
         }
 
-        $matrix = [];
-        $totalHadirBulan = 0;
-        $totalIzinBulan = 0;
-        $totalSakitBulan = 0;
-        $totalAlpaBulan = 0;
+        $bulan = (int) $request->query('bulan', Carbon::now()->month);
+        $tahun = (int) $request->query('tahun', Carbon::now()->year);
 
-        if ($selectedKelas) {
-            $siswaList = Siswa::where('kelas_id', $selectedKelas->id)
-                ->where('status', 'aktif')
-                ->orderBy('no_absen', 'asc')
-                ->orderBy('nama_lengkap', 'asc')
-                ->get();
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getMonthlyData($kelas, $bulan, $tahun);
 
-            $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->format('Y-m-d');
-            $endDate = Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->format('Y-m-d');
+        return $this->exportService->exportMonthlyExcel($data);
+    }
 
-            $absensiRecords = Absensi::where('kelas_id', $selectedKelas->id)
-                ->whereBetween('tanggal', [$startDate, $endDate])
-                ->get()
-                ->groupBy('siswa_id');
+    public function exportBulananPdf(Request $request)
+    {
+        $user = Auth::user();
+        $accessibleKelasIds = $user->getAccessibleKelasIds();
 
-            foreach ($siswaList as $siswa) {
-                $siswaAbsensi = $absensiRecords->get($siswa->id, collect())
-                    ->keyBy(fn ($a) => is_string($a->tanggal) ? substr($a->tanggal, 0, 10) : $a->tanggal->format('Y-m-d'));
-                $h = 0;
-                $i = 0;
-                $s = 0;
-                $a = 0;
-
-                $dailyStatus = [];
-                foreach ($monthDates as $cDate) {
-                    $dStr = $cDate->format('Y-m-d');
-                    $record = $siswaAbsensi->get($dStr);
-                    $status = $record ? $record->status : null;
-                    $dailyStatus[$cDate->day] = [
-                        'status' => $status,
-                        'is_weekend' => $cDate->isWeekend(),
-                    ];
-
-                    if ($status === 'hadir') $h++;
-                    elseif ($status === 'izin') $i++;
-                    elseif ($status === 'sakit') $s++;
-                    elseif ($status === 'alpa') $a++;
-                }
-
-                $totalRecorded = $h + $i + $s + $a;
-                $persentase = $totalRecorded > 0 ? round(($h / $totalRecorded) * 100, 1) : 0;
-
-                $totalHadirBulan += $h;
-                $totalIzinBulan += $i;
-                $totalSakitBulan += $s;
-                $totalAlpaBulan += $a;
-
-                $matrix[] = [
-                    'siswa' => $siswa,
-                    'daily' => $dailyStatus,
-                    'h' => $h,
-                    'i' => $i,
-                    's' => $s,
-                    'a' => $a,
-                    'total' => $totalRecorded,
-                    'persen' => $persentase,
-                ];
-            }
+        $kelasId = (int) $request->query('kelas_id');
+        if (!in_array($kelasId, $accessibleKelasIds)) {
+            abort(403, 'Akses ditolak.');
         }
 
-        return view('guru.rekap.bulanan', compact(
-            'bulan',
-            'tahun',
-            'kelasId',
-            'kelasList',
-            'selectedKelas',
-            'monthDates',
-            'matrix',
-            'totalHadirBulan',
-            'totalIzinBulan',
-            'totalSakitBulan',
-            'totalAlpaBulan'
-        ));
+        $bulan = (int) $request->query('bulan', Carbon::now()->month);
+        $tahun = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getMonthlyData($kelas, $bulan, $tahun);
+
+        return $this->exportService->exportMonthlyPdf($data);
+    }
+
+    /**
+     * Rekap Semesteran untuk Guru
+     */
+    public function semester(Request $request)
+    {
+        $user = Auth::user();
+        $accessibleKelasIds = $user->getAccessibleKelasIds();
+
+        $kelasList = Kelas::whereIn('id', $accessibleKelasIds)->get();
+
+        if ($kelasList->isEmpty()) {
+            return view('guru.rekap.semester', [
+                'kelasList' => collect(),
+                'selectedKelas' => null,
+                'semester' => 'ganjil',
+                'tahunMulai' => Carbon::now()->year,
+                'tahunAjaran' => '',
+                'labelSemester' => '',
+                'bulanList' => [],
+                'matrix' => [],
+                'totalSemesterH' => 0,
+                'totalSemesterI' => 0,
+                'totalSemesterS' => 0,
+                'totalSemesterA' => 0,
+            ])->with('error', 'Anda belum memiliki kelas yang diampu.');
+        }
+
+        $semester = $request->query('semester', Carbon::now()->month >= 7 ? 'ganjil' : 'genap');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->month >= 7 ? Carbon::now()->year : Carbon::now()->year - 1);
+        $kelasId = $request->query('kelas_id', $kelasList->first()->id);
+
+        if (!in_array($kelasId, $accessibleKelasIds)) {
+            abort(403, 'Anda tidak memiliki hak akses untuk melihat rekap kelas ini.');
+        }
+
+        $selectedKelas = $kelasList->firstWhere('id', $kelasId);
+        $data = $this->exportService->getSemesterData($selectedKelas, $semester, $tahunMulai);
+
+        return view('guru.rekap.semester', [
+            'kelasList' => $kelasList,
+            'selectedKelas' => $selectedKelas,
+            'kelasId' => $kelasId,
+            'semester' => $semester,
+            'tahunMulai' => $tahunMulai,
+            'tahunAjaran' => $data['tahunAjaran'],
+            'labelSemester' => $data['labelSemester'],
+            'bulanList' => $data['bulanList'],
+            'matrix' => $data['matrix'],
+            'totalSemesterH' => $data['totalH'],
+            'totalSemesterI' => $data['totalI'],
+            'totalSemesterS' => $data['totalS'],
+            'totalSemesterA' => $data['totalA'],
+        ]);
+    }
+
+    public function exportSemesterExcel(Request $request)
+    {
+        $user = Auth::user();
+        $accessibleKelasIds = $user->getAccessibleKelasIds();
+
+        $kelasId = (int) $request->query('kelas_id');
+        if (!in_array($kelasId, $accessibleKelasIds)) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $semester = $request->query('semester', 'ganjil');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getSemesterData($kelas, $semester, $tahunMulai);
+
+        return $this->exportService->exportSemesterExcel($data);
+    }
+
+    public function exportSemesterPdf(Request $request)
+    {
+        $user = Auth::user();
+        $accessibleKelasIds = $user->getAccessibleKelasIds();
+
+        $kelasId = (int) $request->query('kelas_id');
+        if (!in_array($kelasId, $accessibleKelasIds)) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $semester = $request->query('semester', 'ganjil');
+        $tahunMulai = (int) $request->query('tahun', Carbon::now()->year);
+
+        $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
+        $data = $this->exportService->getSemesterData($kelas, $semester, $tahunMulai);
+
+        return $this->exportService->exportSemesterPdf($data);
     }
 }
-

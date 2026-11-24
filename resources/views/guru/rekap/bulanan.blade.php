@@ -18,9 +18,18 @@
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Rekap Presensi Bulanan</h2>
                 <p class="text-xs text-slate-400 font-medium mt-1">Rekapitulasi catatan presensi bulanan siswa <strong>Kelas {{ $selectedKelas->nama_kelas }}</strong>.</p>
             </div>
+            <div class="flex items-center space-x-2">
+                <!-- Tab Navigation -->
+                <a href="{{ route('guru.rekap.bulanan', ['kelas_id' => $selectedKelas->id]) }}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-xs">
+                    Rekap Bulanan
+                </a>
+                <a href="{{ route('guru.rekap.semester', ['kelas_id' => $selectedKelas->id]) }}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition">
+                    Rekap Semester
+                </a>
+            </div>
         </div>
 
-        <!-- Filter Bar -->
+        <!-- Filter & Export Bar -->
         <div class="custom-card p-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <form method="GET" action="{{ route('guru.rekap.bulanan') }}" class="flex flex-wrap items-center gap-3">
@@ -67,6 +76,25 @@
                         </select>
                     </div>
                 </form>
+
+                <!-- Export Action Buttons -->
+                <div class="flex items-center space-x-2 self-start sm:self-end">
+                    <a href="{{ route('guru.rekap.bulanan.excel', ['kelas_id' => $selectedKelas->id, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
+                        class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Download Excel</span>
+                    </a>
+
+                    <a href="{{ route('guru.rekap.bulanan.pdf', ['kelas_id' => $selectedKelas->id, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
+                        class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>Download PDF</span>
+                    </a>
+                </div>
             </div>
         </div>
 

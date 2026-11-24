@@ -1,0 +1,89 @@
+================================================================================
+PANDUAN: CARA MENGIRIM PROJECT / SAMPLE APP KE CLIENT TANPA BOCOR SOURCE CODE
+================================================================================
+
+Mengapa source code berisiko diambil?
+Project ini menggunakan Laravel (PHP). PHP adalah bahasa pemrograman berbasis teks 
+(interpreted language). Jika Anda mengirim folder project langsung, client bisa 
+membuka dan menyalin seluruh kodenya melalui text editor biasa.
+
+Berikut adalah 3 metode terbaik untuk mengatasinya:
+
+--------------------------------------------------------------------------------
+METODE 1: ONLINE DEMO (HOSTING / VPS) - PALING AMAN & STANDAR INDUSTRI
+--------------------------------------------------------------------------------
+Keamanan: 100% Aman (Kode tidak pernah keluar dari server Anda)
+
+Cara Kerja:
+1. Pasang aplikasi ke server hosting, VPS (seperti DigitalOcean, DomaiNesia, dll), 
+   atau platform cloud (Railway, Fly.io, Render).
+2. Berikan URL demo (contoh: https://demo-absensi.domainanda.com) beserta akun 
+   login untuk testing.
+3. Client bisa mencoba seluruh fitur aplikasi secara langsung melalui browser 
+   tanpa memiliki akses sedikitpun ke source code maupun file konfigurasi (.env).
+
+
+--------------------------------------------------------------------------------
+METODE 2: TUNNELING DARI LAPTOP ANDA (CEPAT, GRATIS, TANPA SEWA SERVER)
+--------------------------------------------------------------------------------
+Keamanan: 100% Aman
+
+Cara Kerja:
+Jalankan aplikasi di laptop Anda sendiri, lalu buat link publik sementara agar 
+client bisa membukanya dari laptop/HP mereka.
+
+Langkah-langkah:
+1. Buka terminal di folder project, jalankan:
+   php artisan serve
+
+2. Buka terminal baru, buat link publik menggunakan salah satu tools gratis berikut:
+   
+   A. Cloudflare Tunnel (Tanpa batasan waktu):
+      cloudflared tunnel --url http://127.0.0.1:8000
+      
+   B. Ngrok:
+      ngrok http 8000
+
+3. Salin URL HTTPS yang muncul di terminal (contoh: https://xxxx.trycloudflare.com) 
+   dan kirimkan ke client untuk dicoba.
+
+Catatan:
+- Laptop Anda harus tetap menyala dan terkoneksi internet selama client mencoba.
+- Begitu terminal ditutup, akses client otomatis terputus seketika.
+
+
+--------------------------------------------------------------------------------
+METODE 3: JIKA CLIENT MEMAKSA HARUS JALAN OFFLINE DI KOMPUTER MEREKA
+--------------------------------------------------------------------------------
+Jika client mengharuskan file diserahkan langsung ke mereka:
+
+1. Enkripsi / Obfuscate File PHP:
+   - IonCube Encoder / SourceGuardian (Standar Profesional):
+     Mengubah kode PHP menjadi biner terenkripsi (bytecode). Kode tidak bisa 
+     dibaca manusia dan bisa dipasangi batas waktu aktif (misal expired dalam 7 hari).
+   - Yakpro-PO (Alternatif Gratis):
+     Mengacak nama variabel, fungsi, dan susunan kode agar sangat sulit dipahami 
+     jika dicuri.
+
+2. Bungkus Jadi File Executable (.exe) Desktop:
+   - Gunakan software seperti "ExeOutput for PHP".
+   - Tool ini membungkus Laravel, web server mini, dan browser bawaan menjadi satu 
+     file .exe terenkripsi. Client tinggal klik dua kali untuk menjalankan aplikasi 
+     tanpa bisa membongkar source code-nya.
+
+
+--------------------------------------------------------------------------------
+TIPS PENTING AGAR APLIKASI TETAP TERLINDUNGI
+--------------------------------------------------------------------------------
+1. Gunakan Dummy Data:
+   Jangan gunakan data asli instansi. Masukkan data contoh menggunakan seeder/dummy.
+
+2. Batasi Fitur (Sample Mode):
+   Nonaktifkan fitur-fitur vital (misal: fitur cetak PDF, ekspor Excel, atau batasi 
+   maksimal 10 data saja yang bisa diinput).
+
+3. Tambahkan Masa Berlaku (Expired Date):
+   Jika terpaksa mengirim file, sisipkan script sederhana di middleware untuk 
+   mengecek tanggal. Jika melewati tanggal tertentu, aplikasi otomatis terkunci.
+================================================================================
+
